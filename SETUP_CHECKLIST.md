@@ -1,9 +1,9 @@
 # New App Setup Checklist
 
 ## Step 1 — Rename the template
-- [ ] Run: `bash rename.sh com.yourname.appname "اسم التطبيق"`
-- [ ] Run `flutter pub get`
-- [ ] Commit: `chore(init): rename template to <appname>`
+- [X] Run: `bash rename.sh com.yourname.appname "اسم التطبيق"`
+- [X] Run `flutter pub get`
+- [X] Commit: `chore(init): rename template to <appname>`
 
 ## Step 2 — Theme
 - [ ] Open `lib/core/theme/app_colors.dart`
