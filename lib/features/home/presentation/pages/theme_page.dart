@@ -1,4 +1,4 @@
-import 'package:aa_template/features/auth/presentation/cubit/auth_cubit.dart';
+﻿import 'package:unicalendar/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,33 +15,33 @@ class ThemePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('مرحباً ${currentUser?.displayName ?? 'بك'}!'),
+        title: Text('Ù…Ø±Ø­Ø¨Ø§Ù‹ ${currentUser?.displayName ?? 'Ø¨Ùƒ'}!'),
         leading: BackButton(onPressed: () => context.pop()),
       ),
       body: ListView(
         padding: context.pagePadding.copyWith(top: 24.h, bottom: 40.h),
         children: [
-          _SectionLabel('الألوان'),
+          _SectionLabel('Ø§Ù„Ø£Ù„ÙˆØ§Ù†'),
           _ColorRow(),
           SizedBox(height: 28.h),
 
-          _SectionLabel('الخطوط'),
+          _SectionLabel('Ø§Ù„Ø®Ø·ÙˆØ·'),
           _TypographyShowcase(),
           SizedBox(height: 28.h),
 
-          _SectionLabel('الأزرار'),
+          _SectionLabel('Ø§Ù„Ø£Ø²Ø±Ø§Ø±'),
           _ButtonShowcase(),
           SizedBox(height: 28.h),
 
-          _SectionLabel('البطاقات'),
+          _SectionLabel('Ø§Ù„Ø¨Ø·Ø§Ù‚Ø§Øª'),
           _CardShowcase(),
           SizedBox(height: 28.h),
 
-          _SectionLabel('حقل الإدخال'),
+          _SectionLabel('Ø­Ù‚Ù„ Ø§Ù„Ø¥Ø¯Ø®Ø§Ù„'),
           _InputShowcase(),
           SizedBox(height: 28.h),
 
-          _SectionLabel('الإشعار السريع'),
+          _SectionLabel('Ø§Ù„Ø¥Ø´Ø¹Ø§Ø± Ø§Ù„Ø³Ø±ÙŠØ¹'),
           _SnackbarShowcase(),
         ],
       ),
@@ -49,7 +49,7 @@ class ThemePage extends StatelessWidget {
   }
 }
 
-// ── Section label ────────────────────────────────────────────────────────────
+// â”€â”€ Section label â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 class _SectionLabel extends StatelessWidget {
   final String label;
@@ -70,7 +70,7 @@ class _SectionLabel extends StatelessWidget {
   }
 }
 
-// ── Colors ───────────────────────────────────────────────────────────────────
+// â”€â”€ Colors â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 class _ColorRow extends StatelessWidget {
   @override
@@ -113,7 +113,7 @@ class _ColorRow extends StatelessWidget {
   }
 }
 
-// ── Typography ───────────────────────────────────────────────────────────────
+// â”€â”€ Typography â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 class _TypographyShowcase extends StatelessWidget {
   @override
@@ -141,7 +141,7 @@ class _TypographyShowcase extends StatelessWidget {
                   child: Row(
                     children: [
                       Expanded(
-                        child: Text('نص تجريبي', style: s.$1),
+                        child: Text('Ù†Øµ ØªØ¬Ø±ÙŠØ¨ÙŠ', style: s.$1),
                       ),
                       Text(
                         s.$2,
@@ -159,7 +159,7 @@ class _TypographyShowcase extends StatelessWidget {
   }
 }
 
-// ── Buttons ──────────────────────────────────────────────────────────────────
+// â”€â”€ Buttons â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 class _ButtonShowcase extends StatelessWidget {
   @override
@@ -167,19 +167,19 @@ class _ButtonShowcase extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        FilledButton(onPressed: () {}, child: const Text('زر أساسي')),
+        FilledButton(onPressed: () {}, child: const Text('Ø²Ø± Ø£Ø³Ø§Ø³ÙŠ')),
         SizedBox(height: 10.h),
-        OutlinedButton(onPressed: () {}, child: const Text('زر ثانوي')),
+        OutlinedButton(onPressed: () {}, child: const Text('Ø²Ø± Ø«Ø§Ù†ÙˆÙŠ')),
         SizedBox(height: 10.h),
-        TextButton(onPressed: () {}, child: const Text('زر نصي')),
+        TextButton(onPressed: () {}, child: const Text('Ø²Ø± Ù†ØµÙŠ')),
         SizedBox(height: 10.h),
-        FilledButton(onPressed: null, child: const Text('معطّل')),
+        FilledButton(onPressed: null, child: const Text('Ù…Ø¹Ø·Ù‘Ù„')),
       ],
     );
   }
 }
 
-// ── Cards ────────────────────────────────────────────────────────────────────
+// â”€â”€ Cards â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 class _CardShowcase extends StatelessWidget {
   @override
@@ -197,10 +197,10 @@ class _CardShowcase extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('عنوان البطاقة', style: context.textTheme.headlineMedium),
+                      Text('Ø¹Ù†ÙˆØ§Ù† Ø§Ù„Ø¨Ø·Ø§Ù‚Ø©', style: context.textTheme.headlineMedium),
                       SizedBox(height: 4.h),
                       Text(
-                        'هذا نص توضيحي داخل البطاقة لمعاينة التصميم',
+                        'Ù‡Ø°Ø§ Ù†Øµ ØªÙˆØ¶ÙŠØ­ÙŠ Ø¯Ø§Ø®Ù„ Ø§Ù„Ø¨Ø·Ø§Ù‚Ø© Ù„Ù…Ø¹Ø§ÙŠÙ†Ø© Ø§Ù„ØªØµÙ…ÙŠÙ…',
                         style: context.textTheme.bodyMedium
                             ?.copyWith(color: context.colors.outline),
                       ),
@@ -221,7 +221,7 @@ class _CardShowcase extends StatelessWidget {
                 Icon(Icons.star, color: context.colors.onPrimaryContainer),
                 SizedBox(width: 12.w),
                 Text(
-                  'بطاقة بلون مميز',
+                  'Ø¨Ø·Ø§Ù‚Ø© Ø¨Ù„ÙˆÙ† Ù…Ù…ÙŠØ²',
                   style: context.textTheme.bodyLarge?.copyWith(
                     color: context.colors.onPrimaryContainer,
                   ),
@@ -235,7 +235,7 @@ class _CardShowcase extends StatelessWidget {
   }
 }
 
-// ── Input ─────────────────────────────────────────────────────────────────────
+// â”€â”€ Input â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 class _InputShowcase extends StatelessWidget {
   @override
@@ -244,15 +244,15 @@ class _InputShowcase extends StatelessWidget {
       children: [
         TextField(
           decoration: const InputDecoration(
-            hintText: 'اكتب هنا...',
+            hintText: 'Ø§ÙƒØªØ¨ Ù‡Ù†Ø§...',
             prefixIcon: Icon(Icons.search),
           ),
         ),
         SizedBox(height: 10.h),
         TextField(
           decoration: InputDecoration(
-            hintText: 'حقل بخطأ',
-            errorText: 'هذا الحقل مطلوب',
+            hintText: 'Ø­Ù‚Ù„ Ø¨Ø®Ø·Ø£',
+            errorText: 'Ù‡Ø°Ø§ Ø§Ù„Ø­Ù‚Ù„ Ù…Ø·Ù„ÙˆØ¨',
             prefixIcon: const Icon(Icons.lock_outline),
           ),
           obscureText: true,
@@ -262,7 +262,7 @@ class _InputShowcase extends StatelessWidget {
   }
 }
 
-// ── Snackbar ─────────────────────────────────────────────────────────────────
+// â”€â”€ Snackbar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 class _SnackbarShowcase extends StatelessWidget {
   @override
@@ -272,9 +272,9 @@ class _SnackbarShowcase extends StatelessWidget {
         Expanded(
           child: FilledButton.tonal(
             onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('هذا إشعار عادي')),
+              const SnackBar(content: Text('Ù‡Ø°Ø§ Ø¥Ø´Ø¹Ø§Ø± Ø¹Ø§Ø¯ÙŠ')),
             ),
-            child: const Text('عادي'),
+            child: const Text('Ø¹Ø§Ø¯ÙŠ'),
           ),
         ),
         SizedBox(width: 10.w),
@@ -286,11 +286,11 @@ class _SnackbarShowcase extends StatelessWidget {
             ),
             onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: const Text('حدث خطأ ما'),
+                content: const Text('Ø­Ø¯Ø« Ø®Ø·Ø£ Ù…Ø§'),
                 backgroundColor: context.colors.error,
               ),
             ),
-            child: const Text('خطأ'),
+            child: const Text('Ø®Ø·Ø£'),
           ),
         ),
       ],

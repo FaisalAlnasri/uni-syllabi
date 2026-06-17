@@ -1,4 +1,4 @@
-enum Env { dev, prod }
+﻿enum Env { dev, prod }
 
 class AppConfig {
   AppConfig._();
@@ -24,7 +24,7 @@ class AppConfig {
   }) {
     _instance = AppConfig._()
       ..env = env
-      ..appName = env == Env.dev ? 'MyApp (Dev)' : 'MyApp'
+      ..appName = env == Env.dev ? 'جدول جامعي (Dev)' : 'جدول جامعي'
       ..revenueCatApiKey = revenueCatApiKey
       ..revenueCatEntitlementId = revenueCatEntitlementId
       ..requiresAuth = requiresAuth

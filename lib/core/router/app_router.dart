@@ -1,6 +1,6 @@
-import 'dart:async';
+﻿import 'dart:async';
 
-import 'package:aa_template/features/auth/domain/entities/auth_state.dart';
+import 'package:unicalendar/features/auth/domain/entities/auth_state.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -25,7 +25,7 @@ final GoRouter appRouter = GoRouter(
 
   routes: [
 
-    // ── Unauthenticated routes ──────────────────────────────
+    // â”€â”€ Unauthenticated routes â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     GoRoute(
       path: AppRoutes.splash,
       builder: (context, state) => const SplashPage(),
@@ -39,7 +39,7 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) => const OnboardingPage(),
     ),
 
-    // ── Shell (bottom nav) ──────────────────────────────────
+    // â”€â”€ Shell (bottom nav) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     ShellRoute(
       builder: (context, state, child) =>
           ScaffoldWithBottomNav(child: child),
@@ -55,20 +55,20 @@ final GoRouter appRouter = GoRouter(
       ],
     ),
 
-    // ── Push routes (no bottom nav) ─────────────────────────
+    // â”€â”€ Push routes (no bottom nav) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     GoRoute(
       path: AppRoutes.themePage,
       builder: (context, state) => const ThemePage(),
     ),
 
-    // ── Paywall (Phase 3) ───────────────────────────────────
+    // â”€â”€ Paywall (Phase 3) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     GoRoute(
       path: AppRoutes.paywall,
       builder: (context, state) => const PaywallPage(),
     ),
   ],
 
-  // ── Auth redirect guard ─────────────────────────────────────
+  // â”€â”€ Auth redirect guard â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   redirect: (context, state) {
     final authState = sl<AuthCubit>().state;
     final location = state.matchedLocation;
@@ -91,7 +91,7 @@ final GoRouter appRouter = GoRouter(
   },
 );
 
-// ── Refresh helper ──────────────────────────────────────────────────────────
+// â”€â”€ Refresh helper â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 class GoRouterRefreshStream extends ChangeNotifier {
   late final StreamSubscription<dynamic> _subscription;
