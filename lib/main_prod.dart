@@ -21,7 +21,7 @@ void main() async {
     env: Env.prod,
     revenueCatApiKey: 'YOUR_RC_PROD_KEY',
     revenueCatEntitlementId: 'premium',
-    requiresAuth: true,
+    requiresAuth: false,
     hasOnboarding: true,
   );
 

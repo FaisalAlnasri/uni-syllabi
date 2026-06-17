@@ -6,23 +6,23 @@
 - [X] Commit: `chore(init): rename template to <appname>`
 
 ## Step 2 — Theme
-- [ ] Open `lib/core/theme/app_colors.dart`
-- [ ] Change `seed` color to your app's primary color
-- [ ] Open `lib/core/theme/app_text_styles.dart`
-- [ ] Confirm font family matches your chosen font (default: Cairo)
-- [ ] Add font files to `assets/fonts/` or switch to `google_fonts`
-- [ ] Commit: `chore(theme): set brand colors and font`
+- [X] Open `lib/core/theme/app_colors.dart`
+- [X] Change `seed` color to your app's primary color
+- [X] Open `lib/core/theme/app_text_styles.dart`
+- [X] Confirm font family matches your chosen font (default: Cairo)
+- [X] Add font files to `assets/fonts/` or switch to `google_fonts`
+- [X] Commit: `chore(theme): set brand colors and font`
 
 ## Step 3 — Firebase
-- [ ] Go to console.firebase.google.com → create a new project
-- [ ] Add an Android app — use your bundle ID from Step 1
-- [ ] Add an iOS app — use the same bundle ID
-- [ ] Enable Authentication → Google provider → add your SHA-1 + SHA-256
-- [ ] Enable Authentication → Apple provider
-- [ ] Download `google-services.json` → place in `android/app/`
-- [ ] Run: `flutterfire configure` → select your new project → generates `lib/firebase_options.dart`
-- [ ] In `main_dev.dart` and `main_prod.dart`, uncomment `Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)`
-- [ ] Commit: `chore(firebase): add firebase config for <appname>`
+- [X] Go to console.firebase.google.com → create a new project
+- [X] Add an Android app — use your bundle ID from Step 1
+- [X] Add an iOS app — use the same bundle ID
+- [X] Enable Authentication → Google provider → add your SHA-1 + SHA-256
+- [X] Enable Authentication → Apple provider
+- [X] Download `google-services.json` → place in `android/app/`
+- [X] Run: `flutterfire configure` → select your new project → generates `lib/firebase_options.dart`
+- [X] In `main_dev.dart` and `main_prod.dart`, uncomment `Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)`
+- [X] Commit: `chore(firebase): add firebase config for <appname>`
 
 ## Step 4 — Android: Google Sign-In SHA fingerprints
 - [ ] Run: `keytool -list -v -keystore "%USERPROFILE%\.android\debug.keystore" -alias androiddebugkey -storepass android -keypass android` (Windows) or `~/.android/debug.keystore` (Mac/Linux)

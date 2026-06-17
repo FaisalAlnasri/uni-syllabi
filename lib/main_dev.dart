@@ -20,7 +20,7 @@ void main() async {
     env: Env.dev,
     revenueCatApiKey: 'YOUR_RC_DEV_KEY',
     revenueCatEntitlementId: 'premium',
-    requiresAuth: true,
+    requiresAuth: false,
     hasOnboarding: true,
   );
 

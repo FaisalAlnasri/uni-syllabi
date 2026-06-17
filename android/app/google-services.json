@@ -1,84 +1,56 @@
 {
   "project_info": {
-    "project_number": "594792346236",
-    "project_id": "aatemplate-24a4d",
-    "storage_bucket": "aatemplate-24a4d.firebasestorage.app"
+    "project_number": "637880034677",
+    "project_id": "uni-syllubi",
+    "storage_bucket": "uni-syllubi.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:594792346236:android:e416dae6bebeb354d1cff9",
+        "mobilesdk_app_id": "1:637880034677:android:ea0d3b93632905bf6adf3c",
         "android_client_info": {
-          "package_name": "com.example.aaTemplate"
+          "package_name": "com.faisalalnasri.unicalendar"
         }
       },
       "oauth_client": [
         {
-          "client_id": "594792346236-plgocek5jatc6k79dpvcni4agnnu8d7p.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBDFxigo1Wt0v3aps9WkyL6VqFK3DVMK4E"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "594792346236-plgocek5jatc6k79dpvcni4agnnu8d7p.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "594792346236-bl7h41khk0nioilfnovnq7rsr0j2pqrh.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.aaTemplate"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:594792346236:android:64536f1a8383556ed1cff9",
-        "android_client_info": {
-          "package_name": "com.faisalalnasri.aaTemplate"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "594792346236-oj1spsr3kj0qh3f67v6mft4k8ad1dbam.apps.googleusercontent.com",
+          "client_id": "637880034677-4lb4sslfjqildkl5pea536raj04f0ouq.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.faisalalnasri.aaTemplate",
+            "package_name": "com.faisalalnasri.unicalendar",
+            "certificate_hash": "d21eee2df8f16e61c61fae3e252880b754f5801e"
+          }
+        },
+        {
+          "client_id": "637880034677-vscb863hak8nrpl7inulbc14b368ch7p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.faisalalnasri.unicalendar",
             "certificate_hash": "0569a79489835829ff597e825374d13e36e0bc71"
           }
         },
         {
-          "client_id": "594792346236-plgocek5jatc6k79dpvcni4agnnu8d7p.apps.googleusercontent.com",
+          "client_id": "637880034677-lp2mkvdst9vrn6ntnkmne5410a6bbe58.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBDFxigo1Wt0v3aps9WkyL6VqFK3DVMK4E"
+          "current_key": "AIzaSyAecCmDFcddi9ZSzSyu6c_qBA5HjlVkHZU"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "594792346236-plgocek5jatc6k79dpvcni4agnnu8d7p.apps.googleusercontent.com",
+              "client_id": "637880034677-lp2mkvdst9vrn6ntnkmne5410a6bbe58.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "594792346236-bl7h41khk0nioilfnovnq7rsr0j2pqrh.apps.googleusercontent.com",
+              "client_id": "637880034677-rcb8nqp1i8uqmgclsan8e4ojlfn57pul.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.aaTemplate"
+                "bundle_id": "com.faisalalnasri.unicalendar"
               }
             }
           ]

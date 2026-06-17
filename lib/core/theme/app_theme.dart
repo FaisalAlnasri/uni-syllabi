@@ -30,16 +30,23 @@ abstract final class AppTheme {
         labelMedium: AppTextStyles.labelMedium,
       ),
 
+      // ── Interaction colors ───────────────────────────────────
+      dividerColor: colorScheme.outlineVariant,
+      splashColor: seedColor.withValues(alpha: 0.08),
+      highlightColor: seedColor.withValues(alpha: 0.04),
+
       // ── AppBar ──────────────────────────────────────────────
       appBarTheme: AppBarTheme(
         backgroundColor: colorScheme.surface,
         foregroundColor: colorScheme.onSurface,
+        surfaceTintColor: Colors.transparent,
         elevation: 0,
         scrolledUnderElevation: 1,
         centerTitle: true,
         titleTextStyle: AppTextStyles.headlineMedium.copyWith(
           color: colorScheme.onSurface,
         ),
+        iconTheme: IconThemeData(color: colorScheme.onSurface),
       ),
 
       // ── Buttons ─────────────────────────────────────────────
@@ -92,12 +99,36 @@ abstract final class AppTheme {
         ),
       ),
 
+      // ── Dialog ──────────────────────────────────────────────
+      dialogTheme: DialogThemeData(
+        backgroundColor: colorScheme.surface,
+        surfaceTintColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16.r),
+        ),
+      ),
+
+      // ── Bottom sheet ────────────────────────────────────────
+      bottomSheetTheme: BottomSheetThemeData(
+        backgroundColor: colorScheme.surface,
+        surfaceTintColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+        ),
+      ),
+
       // ── Scaffold ─────────────────────────────────────────────
       scaffoldBackgroundColor: colorScheme.surface,
+      canvasColor: colorScheme.surface,
 
-      // ── Snackbar ─────────────────────────────────────────────
+      // ── Snackbar — dark pill, matches previous app's style ────
       snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
+        backgroundColor: colorScheme.onSurface,
+        contentTextStyle: AppTextStyles.bodyMedium.copyWith(
+          color: colorScheme.surface,
+          fontWeight: FontWeight.w500,
+        ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12.r),
         ),
@@ -115,14 +146,43 @@ abstract final class AppTheme {
     return build(seedColor: seedColor).copyWith(
       colorScheme: colorScheme,
       scaffoldBackgroundColor: colorScheme.surface,
+      canvasColor: colorScheme.surface,
+      dividerColor: colorScheme.outlineVariant,
       appBarTheme: AppBarTheme(
         backgroundColor: colorScheme.surface,
         foregroundColor: colorScheme.onSurface,
+        surfaceTintColor: Colors.transparent,
         elevation: 0,
         scrolledUnderElevation: 1,
         centerTitle: true,
         titleTextStyle: AppTextStyles.headlineMedium.copyWith(
           color: colorScheme.onSurface,
+        ),
+        iconTheme: IconThemeData(color: colorScheme.onSurface),
+      ),
+      dialogTheme: DialogThemeData(
+        backgroundColor: colorScheme.surface,
+        surfaceTintColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16.r),
+        ),
+      ),
+      bottomSheetTheme: BottomSheetThemeData(
+        backgroundColor: colorScheme.surface,
+        surfaceTintColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+        ),
+      ),
+      snackBarTheme: SnackBarThemeData(
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: colorScheme.onSurface,
+        contentTextStyle: AppTextStyles.bodyMedium.copyWith(
+          color: colorScheme.surface,
+          fontWeight: FontWeight.w500,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.r),
         ),
       ),
     );

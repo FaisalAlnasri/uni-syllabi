@@ -50,20 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBDFxigo1Wt0v3aps9WkyL6VqFK3DVMK4E',
-    appId: '1:594792346236:android:e416dae6bebeb354d1cff9',
-    messagingSenderId: '594792346236',
-    projectId: 'aatemplate-24a4d',
-    storageBucket: 'aatemplate-24a4d.firebasestorage.app',
+    apiKey: 'AIzaSyAecCmDFcddi9ZSzSyu6c_qBA5HjlVkHZU',
+    appId: '1:637880034677:android:ea0d3b93632905bf6adf3c',
+    messagingSenderId: '637880034677',
+    projectId: 'uni-syllubi',
+    storageBucket: 'uni-syllubi.firebasestorage.app',
   );
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyC53qN-EZPdN5v51SOre7hiNcSid89CvaQ',
-    appId: '1:594792346236:ios:da7a5951e8ee2dc3d1cff9',
-    messagingSenderId: '594792346236',
-    projectId: 'aatemplate-24a4d',
-    storageBucket: 'aatemplate-24a4d.firebasestorage.app',
-    androidClientId: '594792346236-oj1spsr3kj0qh3f67v6mft4k8ad1dbam.apps.googleusercontent.com',
-    iosClientId: '594792346236-ousa2lauhre5mbp7togk4c98hq5iaut0.apps.googleusercontent.com',
+    apiKey: 'AIzaSyDXrpZONl3xljHUIfOzMebrTXzp1kc4-5U',
+    appId: '1:637880034677:ios:bb42cfc4065066c16adf3c',
+    messagingSenderId: '637880034677',
+    projectId: 'uni-syllubi',
+    storageBucket: 'uni-syllubi.firebasestorage.app',
+    androidClientId: '637880034677-4lb4sslfjqildkl5pea536raj04f0ouq.apps.googleusercontent.com',
+    iosClientId: '637880034677-s8342iig8209t7v9t3n5tjqs9q9m0tau.apps.googleusercontent.com',
     iosBundleId: 'com.faisalalnasri.aaTemplate',
   );
 }
