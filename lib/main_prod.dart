@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
+import 'dart:io' show Platform;
 import 'core/config/app_config.dart';
 import 'core/di/service_locator.dart';
 import 'core/logging/app_logger.dart';
@@ -19,21 +19,19 @@ void main() async {
 
   AppConfig.setup(
     env: Env.prod,
-    revenueCatApiKey: 'YOUR_RC_PROD_KEY',
+    revenueCatApiKey: Platform.isIOS
+        ? 'appl_mzEWugcuEjeJpFemieDhreiZqLR'
+        : 'goog_jNZjDkhjtCjtsKUaQerMslcqqsv',
     revenueCatEntitlementId: 'premium',
     requiresAuth: false,
     hasOnboarding: true,
   );
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   await setupServiceLocator();
 
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-  ]);
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   AppLogger.info('App started in PROD mode');
 

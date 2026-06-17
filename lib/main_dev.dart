@@ -18,7 +18,7 @@ void main() async {
 
   AppConfig.setup(
     env: Env.dev,
-    revenueCatApiKey: 'YOUR_RC_DEV_KEY',
+    revenueCatApiKey: 'test_pgmRCggDrSghPQhlVvtFhoNYElW',
     revenueCatEntitlementId: 'premium',
     requiresAuth: false,
     hasOnboarding: true,
