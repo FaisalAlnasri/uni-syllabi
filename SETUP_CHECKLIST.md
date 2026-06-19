@@ -31,23 +31,23 @@
 - [ ] Re-run `flutterfire configure`
 
 ## Step 5 — iOS: Apple Sign-In
-- [ ] Open `ios/Runner.xcworkspace` in Xcode
-- [ ] Runner target → Signing & Capabilities → + Capability → Sign In with Apple
-- [ ] Go to developer.apple.com → Identifiers → your App ID → enable Sign In with Apple → Save
-- [ ] Firebase Console → Authentication → Apple → copy the OAuth callback URL
-- [ ] developer.apple.com → your App ID → Sign In with Apple → Configure → add the callback URL as return URL
-- [ ] Commit: `chore(ios): enable apple sign-in capability`
+- [ X] Open `ios/Runner.xcworkspace` in Xcode
+- [ X] Runner target → Signing & Capabilities → + Capability → Sign In with Apple
+- [X] Go to developer.apple.com → Identifiers → your App ID → enable Sign In with Apple → Save
+- [X] Firebase Console → Authentication → Apple → copy the OAuth callback URL
+- [X] developer.apple.com → your App ID → Sign In with Apple → Configure → add the callback URL as return URL
+- [X] Commit: `chore(ios): enable apple sign-in capability`
 
 ## Step 6 — RevenueCat
-- [ ] Go to app.revenuecat.com → create a new project
-- [ ] Add iOS app → enter bundle ID → enter App Store Connect API key
-- [ ] Add Android app → enter bundle ID → enter Play Store credentials
+- [X] Go to app.revenuecat.com → create a new project
+- [X] Add iOS app → enter bundle ID → enter App Store Connect API key
+- [X] Add Android app → enter bundle ID → enter Play Store credentials
 - [ ] Create a Product in App Store Connect and Play Console (subscription)
 - [ ] Back in RC → Products → add your product IDs
 - [ ] RC → Entitlements → create one (e.g. `premium`) → attach your products
 - [ ] RC → Offerings → create one → add a Package → attach entitlement
-- [ ] Copy your RC API keys (iOS + Android — they differ)
-- [ ] Open `lib/main_dev.dart` and `lib/main_prod.dart`:
+- [X] Copy your RC API keys (iOS + Android — they differ)
+- [X] Open `lib/main_dev.dart` and `lib/main_prod.dart`:
       - Set `revenueCatApiKey` to your RC key (use dev key in dev, prod key in prod)
       - Set `revenueCatEntitlementId` to match your RC entitlement ID (e.g. `'premium'`)
 - [ ] Commit: `chore(revenuecat): set RC keys and entitlement ID`
