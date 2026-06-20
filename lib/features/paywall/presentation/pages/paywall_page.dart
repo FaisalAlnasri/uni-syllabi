@@ -128,7 +128,7 @@ class _PaywallContent extends StatelessWidget {
           Align(
             alignment: Alignment.topRight,
             child: IconButton(
-              icon: const Icon(Icons.close),
+              icon: Icon(Icons.close, color: context.colors.onSurface),
               onPressed: () => context.pop(),
             ),
           ),
@@ -236,7 +236,7 @@ class _LoadError extends StatelessWidget {
           Align(
             alignment: Alignment.topRight,
             child: IconButton(
-              icon: const Icon(Icons.close),
+              icon: Icon(Icons.close, color: context.colors.onSurface),
               onPressed: () => context.pop(),
             ),
           ),
