@@ -150,7 +150,7 @@ class _ActionTile extends StatelessWidget {
                   ],
                 ),
               ),
-              Icon(Icons.chevron_left_rounded, size: 22.sp, color: c.textMuted),
+              Icon(Icons.chevron_right_rounded, size: 22.sp, color: c.textMuted),
             ],
           ),
         ),
