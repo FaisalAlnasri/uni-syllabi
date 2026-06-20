@@ -11,7 +11,12 @@ import '../widgets/scaffold_with_bottom_nav.dart';
 import '../../features/auth/presentation/cubit/auth_cubit.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/auth/presentation/pages/splash_page.dart';
-import '../../features/home/presentation/pages/home_page.dart';
+import '../../features/courses/domain/entities/course.dart';
+import '../../features/courses/presentation/pages/calendar_page.dart';
+import '../../features/courses/presentation/pages/course_confirmation_page.dart';
+import '../../features/courses/presentation/pages/course_detail_page.dart';
+import '../../features/courses/presentation/pages/courses_page.dart';
+import '../../features/courses/presentation/pages/timeline_page.dart';
 import '../../features/home/presentation/pages/theme_page.dart';
 import '../../features/onboarding/presentation/pages/onboarding_page.dart';
 import '../../features/home/presentation/pages/profile_page.dart';
@@ -46,7 +51,15 @@ final GoRouter appRouter = GoRouter(
       routes: [
         GoRoute(
           path: AppRoutes.home,
-          builder: (context, state) => const HomePage(),
+          builder: (context, state) => const TimelinePage(),
+        ),
+        GoRoute(
+          path: AppRoutes.calendar,
+          builder: (context, state) => const CalendarPage(),
+        ),
+        GoRoute(
+          path: AppRoutes.courses,
+          builder: (context, state) => const CoursesPage(),
         ),
         GoRoute(
           path: AppRoutes.profile,
@@ -56,6 +69,16 @@ final GoRouter appRouter = GoRouter(
     ),
 
     // â”€â”€ Push routes (no bottom nav) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    GoRoute(
+      path: AppRoutes.courseDetail,
+      builder: (context, state) =>
+          CourseDetailPage(course: state.extra as Course),
+    ),
+    GoRoute(
+      path: AppRoutes.courseConfirmation,
+      builder: (context, state) =>
+          CourseConfirmationPage(courses: state.extra as List<Course>),
+    ),
     GoRoute(
       path: AppRoutes.themePage,
       builder: (context, state) => const ThemePage(),

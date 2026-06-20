@@ -5,8 +5,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../analytics/analytics_service.dart';
 import '../config/app_config.dart';
 import '../storage/onboarding_storage.dart';
+import '../theme/theme_cubit.dart';
 import '../../features/auth/presentation/cubit/auth_cubit.dart';
 import '../../features/auth/domain/services/auth_service.dart';
+import '../../features/courses/data/datasources/local/course_local_datasource.dart';
+import '../../features/courses/data/repositories/course_repository_impl.dart';
+import '../../features/courses/data/services/syllabus_parser_service.dart';
+import '../../features/courses/domain/repositories/course_repository.dart';
+import '../../features/courses/presentation/cubit/course_cubit.dart';
 import '../../features/paywall/domain/subscription.dart';
 import '../../features/paywall/data/purchases_repository_impl.dart';
 import '../../features/paywall/paywall_cubit.dart';
@@ -17,7 +23,7 @@ Future<void> setupServiceLocator() async {
   _registerCore();
   await _registerAuth();
   await _registerPaywall();
-  // Features: _registerFeatures();
+  _registerCourses();
 }
 
 void _registerCore() {
@@ -56,8 +62,25 @@ Future<void> _registerPaywall() async {
   await sl<PurchasesRepository>().init(sl<AuthCubit>().currentUser?.uid);
 }
 
-// ── Uncomment and fill as you add phases ──────────────────────
-//
-// void _registerFeatures() {
-//   sl.registerFactory(() => HomeCubit());
-// }
+// ── Theme ─────────────────────────────────────────────────────
+// Registered alongside courses below (reuses the SharedPreferences singleton).
+
+// ── Courses (syllabus timeline feature) ───────────────────────
+void _registerCourses() {
+  // Theme mode cubit — shared with MaterialApp.router via BlocProvider.
+  sl.registerLazySingleton<ThemeCubit>(() => ThemeCubit(sl<SharedPreferences>()));
+
+  // Data layer
+  sl.registerLazySingleton<CourseLocalDatasource>(() => CourseLocalDatasource());
+  sl.registerLazySingleton<CourseRepository>(
+    () => CourseRepositoryImpl(sl<CourseLocalDatasource>()),
+  );
+  sl.registerLazySingleton<SyllabusParserService>(
+    () => SyllabusParserServiceImpl(AppConfig.instance.syllabusApiBaseUrl),
+  );
+
+  // CourseCubit — lazy singleton shared across all tabs + pushed routes.
+  sl.registerLazySingleton<CourseCubit>(
+    () => CourseCubit(sl<CourseRepository>()),
+  );
+}

@@ -13,6 +13,9 @@ class AppConfig {
   late final bool requiresAuth;
   late final bool hasOnboarding;
 
+  /// Base URL of the syllabus-parsing backend (set per flavor).
+  late final String syllabusApiBaseUrl;
+
   /// Call once at the top of main_dev.dart / main_prod.dart
   /// before runApp().
   static void setup({
@@ -21,6 +24,7 @@ class AppConfig {
     required String revenueCatEntitlementId,
     required bool requiresAuth,
     required bool hasOnboarding,
+    required String syllabusApiBaseUrl,
   }) {
     _instance = AppConfig._()
       ..env = env
@@ -28,7 +32,8 @@ class AppConfig {
       ..revenueCatApiKey = revenueCatApiKey
       ..revenueCatEntitlementId = revenueCatEntitlementId
       ..requiresAuth = requiresAuth
-      ..hasOnboarding = hasOnboarding;
+      ..hasOnboarding = hasOnboarding
+      ..syllabusApiBaseUrl = syllabusApiBaseUrl;
   }
 
   bool get isDev => env == Env.dev;

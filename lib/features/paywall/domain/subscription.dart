@@ -6,7 +6,7 @@ import '../../../core/error/result.dart';
 
 // ── Entity ───────────────────────────────────────────────────────────────────
 
-/// App-level subscription status. Backend-agnostic — no RevenueCat imports.
+/// App-level subscription status. Backend-agnostic، no RevenueCat imports.
 class Subscription extends Equatable {
   final bool isActive;
   final String? productId;

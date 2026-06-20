@@ -57,6 +57,13 @@ dependencies:
   flutter_localizations:
       sdk: flutter
 
+  # ── Courses feature (ported from uni_calendar_app) ──────────
+  hive_flutter: ^1.1.0     # local JSON-string storage (no adapters)
+  http: ^1.2.2             # syllabus parser API calls
+  http_parser: ^4.1.0      # MIME types for multipart upload
+  file_picker: ^8.1.4      # syllabus file selection
+  intl: ^0.20.2            # locale-aware date formatting
+
 
 dev_dependencies:
   flutter_test:

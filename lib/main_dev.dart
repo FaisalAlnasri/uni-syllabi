@@ -3,13 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 
 import 'core/config/app_config.dart';
 import 'core/di/service_locator.dart';
 import 'core/logging/app_logger.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
+import 'core/theme/theme_cubit.dart';
 import 'features/auth/presentation/cubit/auth_cubit.dart';
+import 'features/courses/presentation/cubit/course_cubit.dart';
 
 import 'firebase_options.dart';
 
@@ -22,13 +27,22 @@ void main() async {
     revenueCatEntitlementId: 'premium',
     requiresAuth: false,
     hasOnboarding: true,
+    syllabusApiBaseUrl: 'https://uni-calendar-backend.vercel.app',
   );
+
+  // Local storage + Arabic date formatting (used across the courses feature).
+  await Hive.initFlutter();
+  Intl.defaultLocale = 'ar';
+  await initializeDateFormatting('ar');
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
   await setupServiceLocator();
+
+  // Seed/load persisted courses before first frame.
+  await sl<CourseCubit>().load();
 
   AppLogger.info('App started in DEV mode');
 
@@ -45,21 +59,28 @@ class App extends StatelessWidget {
       designSize: const Size(390, 844),
       minTextAdapt: true,
       splitScreenMode: false,
-      builder: (context, child) => BlocProvider<AuthCubit>(
-        create: (_) => sl<AuthCubit>(),
-        child: MaterialApp.router(
-          title: AppConfig.instance.appName,
-          debugShowCheckedModeBanner: true,
-          theme: AppTheme.build(),
-          // darkTheme: AppTheme.buildDark(),
-          routerConfig: appRouter,
-          locale: const Locale('ar'),
-          supportedLocales: const [Locale('ar')],
-          localizationsDelegates: const [
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
+      builder: (context, child) => MultiBlocProvider(
+        providers: [
+          BlocProvider<AuthCubit>(create: (_) => sl<AuthCubit>()),
+          BlocProvider<CourseCubit>(create: (_) => sl<CourseCubit>()),
+          BlocProvider<ThemeCubit>(create: (_) => sl<ThemeCubit>()),
+        ],
+        child: BlocBuilder<ThemeCubit, ThemeMode>(
+          builder: (context, themeMode) => MaterialApp.router(
+            title: AppConfig.instance.appName,
+            debugShowCheckedModeBanner: true,
+            theme: AppTheme.build(),
+            darkTheme: AppTheme.buildDark(),
+            themeMode: themeMode,
+            routerConfig: appRouter,
+            locale: const Locale('ar'),
+            supportedLocales: const [Locale('ar')],
+            localizationsDelegates: const [
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+          ),
         ),
       ),
     );

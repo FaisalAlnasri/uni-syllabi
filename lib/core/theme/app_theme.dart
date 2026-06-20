@@ -18,6 +18,9 @@ abstract final class AppTheme {
       colorScheme: colorScheme,
       fontFamily: 'Cairo',
 
+      // ── Semantic tokens (context.c.*) ────────────────────────
+      extensions: const <ThemeExtension<dynamic>>[AppColors.light],
+
       // ── Text theme ──────────────────────────────────────────
       textTheme: TextTheme(
         displayLarge: AppTextStyles.displayLarge,
@@ -118,8 +121,8 @@ abstract final class AppTheme {
       ),
 
       // ── Scaffold ─────────────────────────────────────────────
-      scaffoldBackgroundColor: colorScheme.surface,
-      canvasColor: colorScheme.surface,
+      scaffoldBackgroundColor: AppColors.light.background,
+      canvasColor: AppColors.light.background,
 
       // ── Snackbar — dark pill, matches previous app's style ────
       snackBarTheme: SnackBarThemeData(
@@ -145,8 +148,9 @@ abstract final class AppTheme {
 
     return build(seedColor: seedColor).copyWith(
       colorScheme: colorScheme,
-      scaffoldBackgroundColor: colorScheme.surface,
-      canvasColor: colorScheme.surface,
+      extensions: const <ThemeExtension<dynamic>>[AppColors.dark],
+      scaffoldBackgroundColor: AppColors.dark.background,
+      canvasColor: AppColors.dark.background,
       dividerColor: colorScheme.outlineVariant,
       appBarTheme: AppBarTheme(
         backgroundColor: colorScheme.surface,

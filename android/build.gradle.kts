@@ -16,6 +16,13 @@ subprojects {
     project.layout.buildDirectory.value(newSubprojectBuildDir)
 }
 subprojects {
+    // Force all Android subprojects (Flutter plugins) to compile against SDK 36.
+    // Some plugins require compileSdk >= 36 but default to flutter.compileSdkVersion (34).
+    afterEvaluate {
+        extensions.findByName("android")?.let { ext ->
+            (ext as com.android.build.gradle.BaseExtension).compileSdkVersion(36)
+        }
+    }
     project.evaluationDependsOn(":app")
 }
 
