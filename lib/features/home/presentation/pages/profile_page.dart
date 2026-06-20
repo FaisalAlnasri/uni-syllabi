@@ -4,7 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/config/app_config.dart';
+import '../../../../core/di/service_locator.dart';
 import '../../../../core/router/app_routes.dart';
+import '../../../../core/storage/onboarding_storage.dart';
 import '../../../../core/theme/theme_cubit.dart';
 import '../../../../core/utils/extensions/context_extensions.dart';
 import '../../../auth/presentation/cubit/auth_cubit.dart';
@@ -131,6 +133,18 @@ class ProfilePage extends StatelessWidget {
 
     if (confirmed == true) {
       await cubit.signOut();
+      if (!context.mounted) return;
+
+      // Guest usage is allowed (requiresAuth: false), so signing out leaves the
+      // user as a guest with nowhere to go — route them explicitly.
+      if (AppConfig.instance.isDev) {
+        // Dev: restart onboarding to make the signed-out state obvious.
+        await sl<OnboardingStorage>().reset();
+        if (context.mounted) context.go(AppRoutes.onboarding);
+      } else {
+        // Prod: send the user to the (optional) auth page.
+        context.go(AppRoutes.login);
+      }
     }
   }
 }

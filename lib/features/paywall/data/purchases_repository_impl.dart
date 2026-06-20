@@ -35,14 +35,19 @@ class RevenueCatRepository implements PurchasesRepository {
   // ── Offering ───────────────────────────────────────────────────────────────
 
   @override
-  Future<Result<Package, AppError>> fetchOffering() async {
+  Future<Result<PaywallOffering, AppError>> fetchOffering() async {
     try {
       final offerings = await Purchases.getOfferings();
-      final package = offerings.current?.availablePackages.firstOrNull;
-      if (package == null) {
+      AppLogger.info('fetchOffering: ${offerings.all}');
+      final current = offerings.current;
+      final offering = PaywallOffering(
+        annual: current?.annual,
+        lifetime: current?.lifetime,
+      );
+      if (offering.isEmpty) {
         return const Failure(UnknownError(message: 'لا توجد عروض متاحة'));
       }
-      return Success(package);
+      return Success(offering);
     } catch (e, st) {
       AppLogger.warning('fetchOffering failed', e, st);
       return Failure(UnknownError(message: 'تعذّر تحميل العروض', originalException: e));

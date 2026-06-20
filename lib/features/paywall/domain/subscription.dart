@@ -22,6 +22,29 @@ class Subscription extends Equatable {
   List<Object?> get props => [isActive, productId, expiryDate];
 }
 
+// ── Offering ─────────────────────────────────────────────────────────────────
+
+/// The two purchasable tiers shown on the paywall. There is no monthly tier and
+/// no free tier — the paywall is a hard gate.
+class PaywallOffering extends Equatable {
+  /// `PackageType.annual` — positioned as "most popular".
+  final Package? annual;
+
+  /// `PackageType.lifetime` — positioned as "save 60%".
+  final Package? lifetime;
+
+  const PaywallOffering({this.annual, this.lifetime});
+
+  bool get isEmpty => annual == null && lifetime == null;
+
+  /// What to pre-select: the "most popular" annual tier when available,
+  /// otherwise the lifetime tier.
+  Package? get defaultPackage => annual ?? lifetime;
+
+  @override
+  List<Object?> get props => [annual, lifetime];
+}
+
 // ── Repository interface ─────────────────────────────────────────────────────
 
 /// [Package] is a value type from the store SDK; exposing it here avoids a
@@ -29,7 +52,7 @@ class Subscription extends Equatable {
 abstract interface class PurchasesRepository {
   Future<void> init(String? userId);
   bool get isSubscriber;
-  Future<Result<Package, AppError>> fetchOffering();
+  Future<Result<PaywallOffering, AppError>> fetchOffering();
   Future<Result<Subscription, AppError>> purchase(Package package);
   Future<Result<Subscription, AppError>> restorePurchases();
 }

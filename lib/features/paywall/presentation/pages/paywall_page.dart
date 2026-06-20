@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:purchases_flutter/purchases_flutter.dart' show Package;
 
 import '../../../../core/config/app_config.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/utils/extensions/context_extensions.dart';
+import '../../domain/subscription.dart';
 import '../../paywall_cubit.dart';
 import '../../paywall_state.dart';
 import '../paywall_strings.dart';
@@ -41,7 +43,7 @@ class _PaywallView extends StatelessWidget {
                   const SnackBar(content: Text(PaywallStrings.successMessage)),
                 );
                 context.pop();
-              case PaywallError(:final message):
+              case PaywallActionError(:final message):
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(message),
@@ -60,106 +62,202 @@ class _PaywallView extends StatelessWidget {
               );
             }
 
-            // ── Load failure (no package yet) ────────────────────
+            // ── Fatal load failure (no offering) ─────────────────
             if (state is PaywallError) {
-              return Padding(
-                padding: context.pagePadding,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      state.message,
-                      style: context.textTheme.bodyLarge
-                          ?.copyWith(color: context.colors.error),
-                      textAlign: TextAlign.center,
-                    ),
-                    SizedBox(height: 12.h),
-                    TextButton(
-                      onPressed: cubit.loadOffering,
-                      child: const Text('إعادة المحاولة'),
-                    ),
-                  ],
-                ),
-              );
+              return _LoadError(message: state.message, onRetry: cubit.loadOffering);
             }
 
-            // ── Ready / purchasing ───────────────────────────────
-            final package = switch (state) {
-              PaywallReady(:final package) => package,
-              PaywallPurchasing(:final package) => package,
-              _ => null,
+            // ── Ready / purchasing / transient error ─────────────
+            final (offering, selected, isBusy) = switch (state) {
+              PaywallReady(:final offering, :final selected) =>
+                (offering, selected, false),
+              PaywallPurchasing(:final offering, :final selected) =>
+                (offering, selected, true),
+              PaywallActionError(:final offering, :final selected) =>
+                (offering, selected, false),
+              _ => (null, null, false),
             };
-            final isPurchasing = state is PaywallPurchasing;
+            if (offering == null || selected == null) {
+              return const SizedBox.shrink();
+            }
 
-            return Padding(
-              padding: context.pagePadding,
-              child: Column(
-                children: [
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: IconButton(
-                      icon: const Icon(Icons.close),
-                      onPressed: () => context.pop(),
-                    ),
-                  ),
-                  const Spacer(),
-                  _AppIcon(),
-                  SizedBox(height: 16.h),
-                  Text(
-                    PaywallStrings.title,
-                    style: context.textTheme.headlineLarge,
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: 8.h),
-                  Text(
-                    PaywallStrings.subtitle,
-                    style: context.textTheme.bodyMedium
-                        ?.copyWith(color: context.colors.outline),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: 24.h),
-                  const _BenefitRow(PaywallStrings.benefit1),
-                  const _BenefitRow(PaywallStrings.benefit2),
-                  const _BenefitRow(PaywallStrings.benefit3),
-                  const Spacer(),
-                  if (package != null) PackageCard(package: package),
-                  SizedBox(height: 12.h),
-                  SizedBox(
-                    width: double.infinity,
-                    child: FilledButton(
-                      onPressed: (package == null || isPurchasing)
-                          ? null
-                          : () => cubit.purchase(package),
-                      child: isPurchasing
-                          ? SizedBox(
-                              width: 22.r,
-                              height: 22.r,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2.5,
-                                color: context.colors.onPrimary,
-                              ),
-                            )
-                          : const Text(PaywallStrings.purchaseButton),
-                    ),
-                  ),
-                  SizedBox(height: 8.h),
-                  TextButton(
-                    onPressed: isPurchasing ? null : cubit.restorePurchases,
-                    child: const Text(PaywallStrings.restoreButton),
-                  ),
-                  SizedBox(height: 8.h),
-                  Text(
-                    PaywallStrings.termsNote,
-                    style: context.textTheme.labelMedium
-                        ?.copyWith(color: context.colors.outline),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: 24.h),
-                ],
-              ),
+            return _PaywallContent(
+              offering: offering,
+              selected: selected,
+              isBusy: isBusy,
+              onSelect: cubit.selectPackage,
+              onPurchase: cubit.purchase,
+              onRestore: cubit.restorePurchases,
             );
           },
         ),
+      ),
+    );
+  }
+}
+
+// ── Content ──────────────────────────────────────────────────────────────────
+
+class _PaywallContent extends StatelessWidget {
+  final PaywallOffering offering;
+  final Package selected;
+  final bool isBusy;
+  final ValueChanged<Package> onSelect;
+  final VoidCallback onPurchase;
+  final VoidCallback onRestore;
+
+  const _PaywallContent({
+    required this.offering,
+    required this.selected,
+    required this.isBusy,
+    required this.onSelect,
+    required this.onPurchase,
+    required this.onRestore,
+  });
+
+  bool get _lifetimeSelected =>
+      offering.lifetime != null && identical(selected, offering.lifetime);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: context.pagePadding,
+      child: Column(
+        children: [
+          Align(
+            alignment: Alignment.topRight,
+            child: IconButton(
+              icon: const Icon(Icons.close),
+              onPressed: () => context.pop(),
+            ),
+          ),
+          const Spacer(),
+          _AppIcon(),
+          SizedBox(height: 12.h),
+          Text(
+            PaywallStrings.title,
+            style: context.textTheme.headlineSmall,
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 6.h),
+          Text(
+            PaywallStrings.subtitle,
+            style: context.textTheme.bodySmall
+                ?.copyWith(color: context.colors.outline),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 20.h),
+          const _BenefitRow(PaywallStrings.benefitParser),
+          const _BenefitRow(PaywallStrings.benefitCalendar),
+          const _BenefitRow(PaywallStrings.benefitUnlimited),
+          const Spacer(),
+
+          // ── Tiers ──────────────────────────────────────────
+          if (offering.annual case final annual?) ...[
+            PackageCard(
+              package: annual,
+              tierTitle: PaywallStrings.annualTitle,
+              badge: PaywallStrings.annualBadge,
+              period: PaywallStrings.annualPeriod,
+              isSelected: identical(selected, annual),
+              onTap: isBusy ? () {} : () => onSelect(annual),
+            ),
+            SizedBox(height: 12.h),
+          ],
+          if (offering.lifetime case final lifetime?) ...[
+            PackageCard(
+              package: lifetime,
+              tierTitle: PaywallStrings.lifetimeTitle,
+              badge: PaywallStrings.lifetimeBadge,
+              footnote: PaywallStrings.lifetimeNote,
+              isSelected: identical(selected, lifetime),
+              onTap: isBusy ? () {} : () => onSelect(lifetime),
+            ),
+            SizedBox(height: 16.h),
+          ],
+
+          // ── CTA ────────────────────────────────────────────
+          SizedBox(
+            width: double.infinity,
+            child: FilledButton(
+              onPressed: isBusy ? null : onPurchase,
+              child: isBusy
+                  ? SizedBox(
+                      width: 22.r,
+                      height: 22.r,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2.5,
+                        color: context.colors.onPrimary,
+                      ),
+                    )
+                  : Text(
+                      _lifetimeSelected
+                          ? PaywallStrings.buyButton
+                          : PaywallStrings.subscribeButton,
+                    ),
+            ),
+          ),
+          SizedBox(height: 8.h),
+          TextButton(
+            onPressed: isBusy ? null : onRestore,
+            child: const Text(PaywallStrings.restoreButton),
+          ),
+          SizedBox(height: 8.h),
+          Text(
+            PaywallStrings.termsNote,
+            style: context.textTheme.labelMedium
+                ?.copyWith(color: context.colors.outline),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 24.h),
+        ],
+      ),
+    );
+  }
+}
+
+// ── Load error ───────────────────────────────────────────────────────────────
+
+class _LoadError extends StatelessWidget {
+  final String message;
+  final VoidCallback onRetry;
+
+  const _LoadError({required this.message, required this.onRetry});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: context.pagePadding,
+      child: Column(
+        children: [
+          Align(
+            alignment: Alignment.topRight,
+            child: IconButton(
+              icon: const Icon(Icons.close),
+              onPressed: () => context.pop(),
+            ),
+          ),
+          Expanded(
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    message,
+                    style: context.textTheme.bodyLarge
+                        ?.copyWith(color: context.colors.error),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 12.h),
+                  TextButton(
+                    onPressed: onRetry,
+                    child: const Text(PaywallStrings.retryButton),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -174,13 +272,17 @@ class _BenefitRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 6.h),
+      padding: EdgeInsets.symmetric(vertical: 4.h),
       child: Row(
         children: [
-          Icon(Icons.check_circle_outline, color: context.colors.primary),
+          Icon(
+            Icons.check_circle_outline,
+            size: 20.r,
+            color: context.colors.primary,
+          ),
           SizedBox(width: 8.w),
           Expanded(
-            child: Text(label, style: context.textTheme.bodyLarge),
+            child: Text(label, style: context.textTheme.bodyMedium),
           ),
         ],
       ),
@@ -197,8 +299,8 @@ class _AppIcon extends StatelessWidget {
     final initial = name.isNotEmpty ? name.characters.first : '?';
 
     return Container(
-      width: 96.r,
-      height: 96.r,
+      width: 72.r,
+      height: 72.r,
       decoration: BoxDecoration(
         color: context.colors.primary,
         shape: BoxShape.circle,
@@ -206,7 +308,7 @@ class _AppIcon extends StatelessWidget {
       alignment: Alignment.center,
       child: Text(
         initial,
-        style: context.textTheme.displayLarge
+        style: context.textTheme.displaySmall
             ?.copyWith(color: context.colors.onPrimary),
       ),
     );

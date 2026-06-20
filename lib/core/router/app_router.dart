@@ -101,11 +101,18 @@ final GoRouter appRouter = GoRouter(
     if (authState is AuthUnauthenticated) return AppRoutes.login;
 
     if (authState is AuthAuthenticated || authState is AuthGuest) {
-      if (location == AppRoutes.splash || location == AppRoutes.login) {
+      // Leaving the splash screen: route into onboarding or the app.
+      if (location == AppRoutes.splash) {
         if (AppConfig.instance.hasOnboarding &&
             !sl<OnboardingStorage>().isComplete()) {
           return AppRoutes.onboarding;
         }
+        return AppRoutes.home;
+      }
+
+      // A real authenticated user has no reason to see login; guests may stay
+      // there (optional auth) so they can sign in after signing out.
+      if (location == AppRoutes.login && authState is AuthAuthenticated) {
         return AppRoutes.home;
       }
     }
