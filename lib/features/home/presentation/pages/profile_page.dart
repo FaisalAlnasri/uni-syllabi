@@ -10,7 +10,6 @@ import '../../../../core/storage/onboarding_storage.dart';
 import '../../../../core/theme/theme_cubit.dart';
 import '../../../../core/utils/extensions/context_extensions.dart';
 import '../../../auth/presentation/cubit/auth_cubit.dart';
-import '../../../courses/presentation/cubit/course_cubit.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -20,7 +19,6 @@ class ProfilePage extends StatelessWidget {
     final cubit = context.watch<AuthCubit>();
     final user = cubit.currentUser;
     final isAuthenticated = user != null;
-    final courseCount = context.watch<CourseCubit>().state.courses.length;
 
     return Scaffold(
       appBar: AppBar(
