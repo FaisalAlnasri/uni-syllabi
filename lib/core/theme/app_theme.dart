@@ -308,8 +308,8 @@ abstract final class AppTheme {
         backgroundColor: scheme.surface,
         surfaceTintColor: Colors.transparent,
         elevation: 0,
-        showDragHandle: true,
-        dragHandleColor: scheme.outlineVariant,
+        // No `showDragHandle` — the app's sheets draw their own grab handle, so
+        // enabling the framework one too would stack a second line on top.
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(_rSheet.r)),
         ),
