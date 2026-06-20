@@ -117,6 +117,38 @@ class AppColors extends ThemeExtension<AppColors> {
     );
   }
 
+  /// Builds a Material 3 [ColorScheme] whose surface ramp is aligned to these
+  /// semantic tokens, so framework widgets (Card, inputs, chips, sheets) and
+  /// custom widgets that read `context.c.*` share one cohesive palette instead
+  /// of drifting apart. Tonal roles (primary/secondary/tertiary, error) still
+  /// come from a seeded scheme so they stay in harmony.
+  ColorScheme toColorScheme(Brightness brightness, {Color? seed}) {
+    final isDark = brightness == Brightness.dark;
+    final base = ColorScheme.fromSeed(
+      seedColor: seed ?? accent,
+      brightness: brightness,
+    );
+
+    return base.copyWith(
+      primary: seed ?? accent,
+      onPrimary: isDark ? const Color(0xFF06122A) : const Color(0xFFFFFFFF),
+      // Surface ramp — low → high elevation, drawn straight from the tokens
+      // (with a couple of in-between steps for inputs and pressed states).
+      surface: surface,
+      onSurface: textPrimary,
+      onSurfaceVariant: textSecondary,
+      surfaceContainerLowest: isDark ? const Color(0xFF0E1422) : const Color(0xFFFFFFFF),
+      surfaceContainerLow: surface,
+      surfaceContainer: isDark ? const Color(0xFF1A2233) : const Color(0xFFF4F6FA),
+      surfaceContainerHigh: isDark ? const Color(0xFF1F283B) : const Color(0xFFEEF1F7),
+      surfaceContainerHighest: isDark ? const Color(0xFF273245) : const Color(0xFFE7ECF3),
+      outline: border,
+      outlineVariant: borderSubtle,
+      surfaceTint: seed ?? accent,
+      shadow: shadow,
+    );
+  }
+
   @override
   AppColors lerp(ThemeExtension<AppColors>? other, double t) {
     if (other is! AppColors) return this;
