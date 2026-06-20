@@ -8,8 +8,8 @@ const IconData kDefaultCourseIcon = Icons.menu_book_rounded;
 /// Keys are stable identifiers persisted in storage — never store the raw
 /// [IconData] codepoint. Insertion order is the order shown in the picker.
 const Map<String, IconData> kCourseIcons = {
-  'book': Icons.menu_book_rounded,
   'calculate': Icons.calculate_rounded,
+  'sigma': Icons.functions_rounded,
   'science': Icons.science_rounded,
   'biology': Icons.biotech_rounded,
   'code': Icons.code_rounded,
