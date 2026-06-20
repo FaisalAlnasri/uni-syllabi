@@ -142,7 +142,10 @@ class AppColors extends ThemeExtension<AppColors> {
       surfaceContainer: isDark ? const Color(0xFF1A2233) : const Color(0xFFF4F6FA),
       surfaceContainerHigh: isDark ? const Color(0xFF1F283B) : const Color(0xFFEEF1F7),
       surfaceContainerHighest: isDark ? const Color(0xFF273245) : const Color(0xFFE7ECF3),
-      outline: border,
+      // `outline` is M3's *visible* border / medium-emphasis tone — screens also
+      // use it for muted text (section labels, captions), so it must stay
+      // readable. `outlineVariant` carries the faint hairlines (cards, dividers).
+      outline: textSecondary,
       outlineVariant: borderSubtle,
       surfaceTint: seed ?? accent,
       shadow: shadow,
