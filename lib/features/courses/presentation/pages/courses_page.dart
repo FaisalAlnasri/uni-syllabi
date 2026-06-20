@@ -41,63 +41,11 @@ class CoursesPage extends StatelessWidget {
                   for (final course in courses)
                     Padding(
                       padding: EdgeInsets.only(bottom: 12.h),
-                      child: _DismissibleCourseCard(course: course),
+                      child: _CourseCard(course: course),
                     ),
                 ],
               ),
       ),
-    );
-  }
-}
-
-class _DismissibleCourseCard extends StatelessWidget {
-  final Course course;
-  const _DismissibleCourseCard({required this.course});
-
-  Future<bool> _confirmDelete(BuildContext context) async {
-    return await showDialog<bool>(
-          context: context,
-          builder: (ctx) => AlertDialog(
-            title: const Text(CoursesStrings.removeCourseTitle),
-            content: Text(CoursesStrings.removeCourseBody(course.title)),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(ctx, false),
-                child: const Text(CoursesStrings.cancel),
-              ),
-              TextButton(
-                onPressed: () => Navigator.pop(ctx, true),
-                child: const Text(
-                  CoursesStrings.remove,
-                  style: TextStyle(color: Colors.red),
-                ),
-              ),
-            ],
-          ),
-        ) ??
-        false;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Dismissible(
-      key: ValueKey(course.id),
-      direction: DismissDirection.endToStart,
-      confirmDismiss: (_) => _confirmDelete(context),
-      onDismissed: (_) {
-        context.read<CourseCubit>().deleteCourse(course.id);
-      },
-      background: Container(
-        alignment: AlignmentDirectional.centerEnd,
-        padding: EdgeInsetsDirectional.only(end: 20.w),
-        decoration: BoxDecoration(
-          color: Colors.red.shade400,
-          borderRadius: BorderRadius.circular(16.r),
-        ),
-        child: Icon(Icons.delete_outline_rounded,
-            color: Colors.white, size: 26.sp),
-      ),
-      child: _CourseCard(course: course),
     );
   }
 }
