@@ -15,6 +15,11 @@ abstract final class AnalyticsEvents {
   static const String onboardingCompleted = 'onboarding_completed';
   static const String onboardingStepViewed = 'onboarding_step_viewed';
 
+  // ── Notification opt-in ────────────────────────────────────
+  static const String notificationShown = 'notification_shown';
+  static const String notificationAccepted = 'notification_accepted';
+  static const String notificationSkipped = 'notification_skipped';
+
   // ── Paywall ────────────────────────────────────────────────
   static const String paywallViewed = 'paywall_viewed';
   static const String paywallDismissed = 'paywall_dismissed';

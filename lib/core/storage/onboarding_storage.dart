@@ -10,4 +10,7 @@ class OnboardingStorage {
   bool isComplete() => _prefs.getBool(_key) ?? false;
 
   Future<void> setComplete() => _prefs.setBool(_key, true);
+
+  /// Clears the completion flag so the onboarding flow runs again.
+  Future<void> reset() => _prefs.remove(_key);
 }

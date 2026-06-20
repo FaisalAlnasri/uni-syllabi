@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../analytics/analytics_service.dart';
 import '../config/app_config.dart';
+import '../notifications/notification_service.dart';
 import '../storage/onboarding_storage.dart';
 import '../theme/theme_cubit.dart';
 import '../../features/auth/presentation/cubit/auth_cubit.dart';
@@ -35,6 +36,11 @@ void _registerCore() {
       () => FirebaseAnalyticsService(FirebaseAnalytics.instance),
     );
   }
+
+  // Notifications
+  sl.registerLazySingleton<NotificationService>(
+    () => PermissionHandlerNotificationService(),
+  );
 }
 
 // ── Auth ──────────────────────────────────────────────────────

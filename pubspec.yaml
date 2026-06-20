@@ -1,4 +1,4 @@
-﻿name: unicalendar
+name: unicalendar
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -63,6 +63,7 @@ dependencies:
   http_parser: ^4.1.0      # MIME types for multipart upload
   file_picker: ^8.1.4      # syllabus file selection
   intl: ^0.20.2            # locale-aware date formatting
+  permission_handler: ^12.0.3
 
 
 dev_dependencies:
