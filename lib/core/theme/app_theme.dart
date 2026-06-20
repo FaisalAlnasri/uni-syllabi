@@ -152,6 +152,12 @@ abstract final class AppTheme {
       scaffoldBackgroundColor: AppColors.dark.background,
       canvasColor: AppColors.dark.background,
       dividerColor: colorScheme.outlineVariant,
+      // The textTheme is colored once in build() under the light brightness, so
+      // copyWith would leave dark-on-dark text (e.g. the profile username).
+      // Re-apply the dark scheme's onSurface color here.
+      textTheme: build(seedColor: seedColor)
+          .textTheme
+          .apply(bodyColor: colorScheme.onSurface, displayColor: colorScheme.onSurface),
       // Card/input themes are baked with the light colorScheme inside build(),
       // so re-derive them here from the dark scheme — otherwise Cards (e.g. the
       // profile tiles) keep their light surface color in dark mode.
@@ -175,7 +181,7 @@ abstract final class AppTheme {
         ),
       ),
       appBarTheme: AppBarTheme(
-        backgroundColor: colorScheme.surface,
+        backgroundColor: AppColors.dark.background,
         foregroundColor: colorScheme.onSurface,
         surfaceTintColor: Colors.transparent,
         elevation: 0,
