@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../di/service_locator.dart';
 import '../router/app_routes.dart';
 import '../theme/app_colors.dart';
+import '../../features/paywall/domain/subscription.dart';
 import '../../features/courses/data/services/syllabus_parser_service.dart';
 import '../../features/courses/presentation/courses_strings.dart';
 import '../../features/courses/presentation/widgets/add_action_sheet.dart';
@@ -34,6 +35,11 @@ class ScaffoldWithBottomNav extends StatelessWidget {
     if (action == null || !context.mounted) return;
     switch (action) {
       case AddAction.syllabus:
+        // AI syllabus parser is premium-gated.
+        if (!sl<PurchasesRepository>().isSubscriber) {
+          context.push(AppRoutes.paywall);
+          return;
+        }
         _openUpload(context);
       case AddAction.deliverable:
         await showAddDeliverableSheet(context);

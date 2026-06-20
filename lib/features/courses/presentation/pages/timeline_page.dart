@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../core/di/service_locator.dart';
+import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../paywall/domain/subscription.dart';
 import '../../domain/entities/course.dart';
 import '../../domain/entities/deliverable.dart';
 import '../courses_strings.dart';
@@ -57,6 +61,11 @@ class TimelinePage extends StatelessWidget {
   }
 
   void _export(BuildContext context, CourseCubit cubit) {
+    // Calendar export is premium-gated.
+    if (!sl<PurchasesRepository>().isSubscriber) {
+      context.push(AppRoutes.paywall);
+      return;
+    }
     cubit.exportToCalendar();
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text(CoursesStrings.calendarExportComingSoon)),
