@@ -74,11 +74,6 @@ class ProfilePage extends StatelessWidget {
           // ── About ─────────────────────────────────────────────
           _SectionLabel('حول التطبيق'),
           _InfoTile(
-            icon: Icons.menu_book_outlined,
-            label: 'الدورات المتتبعة',
-            value: '$courseCount',
-          ),
-          _InfoTile(
             icon: Icons.info_outline_rounded,
             label: 'الإصدار',
             value: '1.0.0',
