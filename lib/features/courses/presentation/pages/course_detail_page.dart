@@ -9,6 +9,7 @@ import '../../domain/entities/deliverable.dart';
 import '../courses_strings.dart';
 import '../cubit/course_cubit.dart';
 import '../widgets/deliverable_detail_sheet.dart';
+import '../widgets/deliverable_form_sheet.dart';
 import '../widgets/type_glyph.dart';
 
 class CourseDetailPage extends StatelessWidget {
@@ -36,32 +37,30 @@ class CourseDetailPage extends StatelessWidget {
         return da.compareTo(db);
       });
 
-    final totalWeight = live.deliverables
-        .where((d) => d.weight != null)
-        .fold<double>(0, (s, d) => s + d.weight!);
-
     return Scaffold(
       backgroundColor: c.background,
       appBar: AppBar(title: Text(live.title)),
       body: ListView(
         padding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 32.h),
         children: [
-          _SummaryCard(
-            color: color,
-            itemCount: live.deliverables.length,
-            totalWeight: totalWeight,
-          ),
-          SizedBox(height: 20.h),
+          SizedBox(height: 8.h),
           Padding(
             padding: EdgeInsetsDirectional.only(start: 4.w, bottom: 10.h),
-            child: Text(
-              CoursesStrings.deliverablesSection,
-              style: TextStyle(
-                fontSize: 11.sp,
-                fontWeight: FontWeight.w700,
-                color: c.textMuted,
-                letterSpacing: 0.8,
-              ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    CoursesStrings.deliverablesSection,
+                    style: TextStyle(
+                      fontSize: 11.sp,
+                      fontWeight: FontWeight.w700,
+                      color: c.textMuted,
+                      letterSpacing: 0.8,
+                    ),
+                  ),
+                ),
+                _AddDeliverableButton(course: live),
+              ],
             ),
           ),
           for (final d in sorted)
@@ -76,6 +75,46 @@ class CourseDetailPage extends StatelessWidget {
           SizedBox(height: 12.h),
           _DeleteCourseButton(course: live),
         ],
+      ),
+    );
+  }
+}
+
+/// Compact pill button that opens the deliverable form locked to [course],
+/// then appends the result through the cubit.
+class _AddDeliverableButton extends StatelessWidget {
+  final Course course;
+  const _AddDeliverableButton({required this.course});
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.c;
+    final accent = c.accent;
+
+    return Material(
+      color: accent.withValues(alpha: 0.10),
+      borderRadius: BorderRadius.circular(20.r),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(20.r),
+        onTap: () => showAddDeliverableSheet(context, lockedCourse: course),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.add_rounded, size: 16.sp, color: accent),
+              SizedBox(width: 4.w),
+              Text(
+                CoursesStrings.addDeliverableOption,
+                style: TextStyle(
+                  color: accent,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 12.sp,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -170,89 +209,6 @@ class _DeleteCourseButton extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class _SummaryCard extends StatelessWidget {
-  final Color color;
-  final int itemCount;
-  final double totalWeight;
-
-  const _SummaryCard({
-    required this.color,
-    required this.itemCount,
-    required this.totalWeight,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(18.r),
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [color, Color.lerp(color, Colors.black, 0.22)!],
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: color.withValues(alpha: 0.3),
-            blurRadius: 18.r,
-            offset: Offset(0, 8.h),
-          ),
-        ],
-      ),
-      padding: EdgeInsets.all(20.r),
-      child: Row(
-        children: [
-          _Stat(value: '$itemCount', label: CoursesStrings.deliverables),
-          Container(
-            width: 1.w,
-            height: 36.h,
-            color: Colors.white.withValues(alpha: 0.25),
-            margin: EdgeInsets.symmetric(horizontal: 20.w),
-          ),
-          _Stat(
-            value: totalWeight > 0
-                ? '${(totalWeight * 100).toStringAsFixed(0)}%'
-                : '—',
-            label: CoursesStrings.gradedWeight,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _Stat extends StatelessWidget {
-  final String value;
-  final String label;
-  const _Stat({required this.value, required this.label});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          value,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 24.sp,
-            fontWeight: FontWeight.w800,
-          ),
-        ),
-        SizedBox(height: 2.h),
-        Text(
-          label,
-          style: TextStyle(
-            color: Colors.white.withValues(alpha: 0.8),
-            fontSize: 12.sp,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ],
     );
   }
 }
