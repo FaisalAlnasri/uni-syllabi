@@ -315,7 +315,7 @@ class _SettingsTile extends StatelessWidget {
           style: context.textTheme.bodyLarge?.copyWith(color: color),
         ),
         trailing: Icon(
-          Icons.chevron_left,
+          Icons.chevron_right,
           color: context.colors.outline,
         ),
         onTap: onTap,
