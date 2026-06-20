@@ -66,6 +66,24 @@ class CourseCubit extends Cubit<CourseState> {
     emit(state.copyWith(courses: [...state.courses, course]));
   }
 
+  /// Appends a new [deliverable] to the course identified by [courseId] and
+  /// persists the updated course.
+  Future<void> addDeliverable(String courseId, Deliverable deliverable) async {
+    final next = [
+      for (final course in state.courses)
+        course.id == courseId
+            ? Course(
+                id: course.id,
+                title: course.title,
+                color: course.color,
+                deliverables: [...course.deliverables, deliverable],
+              )
+            : course,
+    ];
+    emit(state.copyWith(courses: next));
+    await _repository.saveCourse(next.firstWhere((c) => c.id == courseId));
+  }
+
   Future<void> updateDeliverable(String courseId, Deliverable updated) async {
     final next = [
       for (final course in state.courses)

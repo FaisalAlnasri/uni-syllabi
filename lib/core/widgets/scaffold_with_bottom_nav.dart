@@ -6,6 +6,9 @@ import '../router/app_routes.dart';
 import '../theme/app_colors.dart';
 import '../../features/courses/data/services/syllabus_parser_service.dart';
 import '../../features/courses/presentation/courses_strings.dart';
+import '../../features/courses/presentation/widgets/add_action_sheet.dart';
+import '../../features/courses/presentation/widgets/course_form_sheet.dart';
+import '../../features/courses/presentation/widgets/deliverable_form_sheet.dart';
 import '../../features/courses/presentation/widgets/syllabus_upload_dialog.dart';
 
 /// Hosts the 4 bottom-nav tabs (Timeline, Calendar, Courses, Profile) and the
@@ -24,11 +27,26 @@ class ScaffoldWithBottomNav extends StatelessWidget {
     );
   }
 
+  /// Shows the "+" menu and routes to the chosen flow: upload a syllabus, add a
+  /// deliverable to an existing course, or create a brand-new course.
+  Future<void> _openAddMenu(BuildContext context) async {
+    final action = await showAddActionSheet(context);
+    if (action == null || !context.mounted) return;
+    switch (action) {
+      case AddAction.syllabus:
+        _openUpload(context);
+      case AddAction.deliverable:
+        await showAddDeliverableSheet(context);
+      case AddAction.course:
+        await showCreateCourseSheet(context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: child,
-      floatingActionButton: _AddButton(onTap: () => _openUpload(context)),
+      floatingActionButton: _AddButton(onTap: () => _openAddMenu(context)),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: _BottomNav(index: _selectedIndex(context)),
     );

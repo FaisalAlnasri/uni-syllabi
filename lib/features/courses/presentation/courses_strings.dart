@@ -103,6 +103,42 @@ abstract final class CoursesStrings {
   static const String unknownError = 'خطأ غير معروف';
   static const String genericError = 'حدث خطأ ما. يُرجى المحاولة مرة أخرى.';
 
+  // ── Add menu (FAB) ──────────────────────────────────────────
+  static const String addMenuTitle = 'ماذا تريد أن تضيف؟';
+  static const String addSyllabusOption = 'رفع خطة دراسية';
+  static const String addSyllabusOptionSubtitle =
+      'استخرج جميع المواعيد تلقائيًا من ملف';
+  static const String addDeliverableOption = 'إضافة متطلب';
+  static const String addDeliverableOptionSubtitle =
+      'أضف واجبًا أو اختبارًا إلى مقرر موجود';
+  static const String addCourseOption = 'إنشاء مقرر';
+  static const String addCourseOptionSubtitle =
+      'أنشئ مقررًا جديدًا مع متطلباته';
+
+  // ── New deliverable form ────────────────────────────────────
+  static const String newDeliverable = 'متطلب جديد';
+  static const String courseField = 'المقرر';
+  static const String chooseCourse = 'اختر المقرر';
+  static const String deliverableTitleHint = 'مثال: الاختبار النصفي';
+  static const String addAction = 'إضافة';
+  static const String enterDeliverableTitle = 'يُرجى إدخال عنوان المتطلب';
+  static const String chooseCourseFirst = 'يُرجى اختيار المقرر';
+  static const String noCoursesToAddTo =
+      'لا توجد مقررات بعد، أنشئ مقررًا أولًا.';
+  static const String deliverableAdded = 'تمت إضافة المتطلب';
+
+  // ── New course form ─────────────────────────────────────────
+  static const String newCourse = 'مقرر جديد';
+  static const String courseTitleField = 'اسم المقرر';
+  static const String courseTitleHint = 'مثال: الرياضيات 101';
+  static const String courseColorField = 'اللون';
+  static const String optionalDeliverables = 'المتطلبات (اختياري)';
+  static const String noDeliverablesYet =
+      'لم تُضف أي متطلبات بعد، يمكنك إضافتها لاحقًا.';
+  static const String createCourse = 'إنشاء المقرر';
+  static const String enterCourseTitle = 'يُرجى إدخال اسم المقرر';
+  static const String courseCreated = 'تم إنشاء المقرر';
+
   // ── Deliverable type labels ─────────────────────────────────
   static const String typeExam = 'اختبار';
   static const String typeQuiz = 'اختبار قصير';
