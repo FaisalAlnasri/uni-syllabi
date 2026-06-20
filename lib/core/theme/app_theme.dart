@@ -152,6 +152,28 @@ abstract final class AppTheme {
       scaffoldBackgroundColor: AppColors.dark.background,
       canvasColor: AppColors.dark.background,
       dividerColor: colorScheme.outlineVariant,
+      // Card/input themes are baked with the light colorScheme inside build(),
+      // so re-derive them here from the dark scheme — otherwise Cards (e.g. the
+      // profile tiles) keep their light surface color in dark mode.
+      cardTheme: CardThemeData(
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16.r),
+        ),
+        color: colorScheme.surfaceContainerLow,
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: colorScheme.surfaceContainerHighest,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.r),
+          borderSide: BorderSide.none,
+        ),
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: 16.w,
+          vertical: 14.h,
+        ),
+      ),
       appBarTheme: AppBarTheme(
         backgroundColor: colorScheme.surface,
         foregroundColor: colorScheme.onSurface,
