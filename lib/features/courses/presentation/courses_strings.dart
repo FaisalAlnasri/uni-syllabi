@@ -92,6 +92,7 @@ abstract final class CoursesStrings {
   // ── Deliverable detail sheet ────────────────────────────────
   static const String title = 'العنوان';
   static const String type = 'النوع';
+  static const String iconField = 'الأيقونة';
   static const String weightPercentLabel = 'الوزن (٪)';
   static const String dueDate = 'الموعد النهائي';
   static const String tapToSet = 'انقر للتحديد';

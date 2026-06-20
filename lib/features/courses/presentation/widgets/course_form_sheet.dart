@@ -8,7 +8,9 @@ import '../../domain/entities/course.dart';
 import '../../domain/entities/deliverable.dart';
 import '../courses_strings.dart';
 import '../cubit/course_cubit.dart';
+import 'course_glyph.dart';
 import 'deliverable_form_sheet.dart';
+import 'icon_choice_picker.dart';
 import 'type_glyph.dart';
 
 /// Preset course colors (match the seed palette style).
@@ -56,6 +58,7 @@ class _CourseFormSheet extends StatefulWidget {
 class _CourseFormSheetState extends State<_CourseFormSheet> {
   final _titleController = TextEditingController();
   String _color = _coursePalette.first;
+  String? _iconKey;
   final List<Deliverable> _deliverables = [];
   String? _error;
 
@@ -87,6 +90,7 @@ class _CourseFormSheetState extends State<_CourseFormSheet> {
         id: generateId(),
         title: title,
         color: _color,
+        iconKey: _iconKey,
         deliverables: List.unmodifiable(_deliverables),
       ),
     );
@@ -180,6 +184,17 @@ class _CourseFormSheetState extends State<_CourseFormSheet> {
                       onTap: () => setState(() => _color = hex),
                     ),
                 ],
+              ),
+              SizedBox(height: 18.h),
+
+              // Icon
+              _FieldLabel(CoursesStrings.iconField),
+              SizedBox(height: 8.h),
+              IconChoicePicker(
+                autoIcon: kDefaultCourseIcon,
+                icons: kCourseIcons,
+                selectedKey: _iconKey,
+                onSelected: (k) => setState(() => _iconKey = k),
               ),
               SizedBox(height: 18.h),
 

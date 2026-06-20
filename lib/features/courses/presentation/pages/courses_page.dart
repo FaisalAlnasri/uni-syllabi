@@ -8,6 +8,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../domain/entities/course.dart';
 import '../courses_strings.dart';
 import '../cubit/course_cubit.dart';
+import '../widgets/course_glyph.dart';
 
 class CoursesPage extends StatelessWidget {
   const CoursesPage({super.key});
@@ -88,7 +89,7 @@ class _CourseCard extends StatelessWidget {
                         color: color.withValues(alpha: 0.12),
                         borderRadius: BorderRadius.circular(12.r),
                       ),
-                      child: Icon(Icons.menu_book_rounded, color: color),
+                      child: Icon(courseIcon(course.iconKey), color: color),
                     ),
                     SizedBox(width: 14.w),
                     Expanded(

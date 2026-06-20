@@ -9,18 +9,21 @@ class CourseModel {
   final String title;
   final List<DeliverableModel> deliverables;
   final String? color;
+  final String? iconKey;
 
   const CourseModel({
     required this.id,
     required this.title,
     required this.deliverables,
     this.color,
+    this.iconKey,
   });
 
   factory CourseModel.fromJson(Map<String, dynamic> json) => CourseModel(
         id: json['id'] as String? ?? _generateId(),
         title: json['title'] as String,
         color: json['color'] as String?,
+        iconKey: json['iconKey'] as String?,
         deliverables: (json['deliverables'] as List<dynamic>)
             .map((d) => DeliverableModel.fromJson(d as Map<String, dynamic>))
             .toList(),
@@ -30,6 +33,7 @@ class CourseModel {
         'id': id,
         'title': title,
         'color': color,
+        'iconKey': iconKey,
         'deliverables': deliverables.map((d) => d.toJson()).toList(),
       };
 
@@ -42,6 +46,7 @@ class CourseModel {
         id: entity.id,
         title: entity.title,
         color: entity.color,
+        iconKey: entity.iconKey,
         deliverables:
             entity.deliverables.map(DeliverableModel.fromEntity).toList(),
       );
@@ -50,6 +55,7 @@ class CourseModel {
         id: id,
         title: title,
         color: color,
+        iconKey: iconKey,
         deliverables: deliverables.map((d) => d.toEntity()).toList(),
       );
 

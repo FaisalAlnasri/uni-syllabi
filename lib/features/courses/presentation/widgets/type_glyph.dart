@@ -5,7 +5,7 @@ import '../courses_strings.dart';
 
 IconData typeIcon(DeliverableType t) => switch (t) {
       DeliverableType.exam => Icons.edit_document,
-      DeliverableType.quiz => Icons.help_outline_rounded,
+      DeliverableType.quiz => Icons.checklist_rtl,
       DeliverableType.assignment => Icons.description_outlined,
       DeliverableType.project => Icons.lightbulb_outline_rounded,
       DeliverableType.other => Icons.event_note_outlined,

@@ -76,6 +76,7 @@ class CourseCubit extends Cubit<CourseState> {
                 id: course.id,
                 title: course.title,
                 color: course.color,
+                iconKey: course.iconKey,
                 deliverables: [...course.deliverables, deliverable],
               )
             : course,
@@ -92,6 +93,7 @@ class CourseCubit extends Cubit<CourseState> {
                 id: course.id,
                 title: course.title,
                 color: course.color,
+                iconKey: course.iconKey,
                 deliverables: [
                   for (final d in course.deliverables)
                     d.id == updated.id ? updated : d,
@@ -113,6 +115,7 @@ class CourseCubit extends Cubit<CourseState> {
                 id: course.id,
                 title: course.title,
                 color: course.color,
+                iconKey: course.iconKey,
                 deliverables: [
                   for (final d in course.deliverables)
                     d.id == deliverableId
@@ -150,6 +153,7 @@ class CourseCubit extends Cubit<CourseState> {
                 id: course.id,
                 title: course.title,
                 color: course.color,
+                iconKey: course.iconKey,
                 deliverables: [
                   for (final d in course.deliverables)
                     if (d.id != deliverableId) d,
