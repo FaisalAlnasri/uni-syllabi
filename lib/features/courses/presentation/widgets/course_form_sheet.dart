@@ -48,19 +48,58 @@ Future<void> showCreateCourseSheet(BuildContext context) async {
   );
 }
 
+/// Presents the "edit course" form (title/color/icon) for an existing [course]
+/// and persists the changes via the [CourseCubit]. Deliverables are managed
+/// separately, so they're carried over unchanged.
+Future<void> showEditCourseSheet(BuildContext context, Course course) async {
+  final cubit = context.read<CourseCubit>();
+  final messenger = ScaffoldMessenger.of(context);
+
+  final updated = await showModalBottomSheet<Course>(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+    builder: (_) => BlocProvider.value(
+      value: cubit,
+      child: _CourseFormSheet(initial: course),
+    ),
+  );
+
+  if (updated == null) return;
+  await cubit.updateCourse(updated);
+  messenger.showSnackBar(
+    const SnackBar(content: Text(CoursesStrings.courseUpdated)),
+  );
+}
+
 class _CourseFormSheet extends StatefulWidget {
-  const _CourseFormSheet();
+  /// When non-null the form edits this course (title/color/icon) instead of
+  /// creating a new one.
+  final Course? initial;
+
+  const _CourseFormSheet({this.initial});
 
   @override
   State<_CourseFormSheet> createState() => _CourseFormSheetState();
 }
 
 class _CourseFormSheetState extends State<_CourseFormSheet> {
-  final _titleController = TextEditingController();
-  String _color = _coursePalette.first;
+  late final TextEditingController _titleController;
+  late String _color;
   String? _iconKey;
   final List<Deliverable> _deliverables = [];
   String? _error;
+
+  bool get _isEditing => widget.initial != null;
+
+  @override
+  void initState() {
+    super.initState();
+    final initial = widget.initial;
+    _titleController = TextEditingController(text: initial?.title ?? '');
+    _color = initial?.color ?? _coursePalette.first;
+    _iconKey = initial?.iconKey;
+  }
 
   @override
   void dispose() {
@@ -85,13 +124,15 @@ class _CourseFormSheetState extends State<_CourseFormSheet> {
       setState(() => _error = CoursesStrings.enterCourseTitle);
       return;
     }
+    final initial = widget.initial;
     Navigator.of(context).pop<Course>(
       Course(
-        id: generateId(),
+        id: initial?.id ?? generateId(),
         title: title,
         color: _color,
         iconKey: _iconKey,
-        deliverables: List.unmodifiable(_deliverables),
+        deliverables:
+            initial?.deliverables ?? List.unmodifiable(_deliverables),
       ),
     );
   }
@@ -133,7 +174,7 @@ class _CourseFormSheetState extends State<_CourseFormSheet> {
               ),
               SizedBox(height: 18.h),
               Text(
-                CoursesStrings.newCourse,
+                _isEditing ? CoursesStrings.editCourse : CoursesStrings.newCourse,
                 style: TextStyle(
                   fontSize: 17.sp,
                   fontWeight: FontWeight.w800,
@@ -198,44 +239,48 @@ class _CourseFormSheetState extends State<_CourseFormSheet> {
               ),
               SizedBox(height: 18.h),
 
-              // Optional deliverables
-              Row(
-                children: [
-                  Expanded(child: _FieldLabel(CoursesStrings.optionalDeliverables)),
-                  TextButton.icon(
-                    onPressed: _addDeliverable,
-                    icon: Icon(Icons.add_rounded, size: 18.sp, color: c.accent),
-                    label: Text(
-                      CoursesStrings.addAction,
-                      style: TextStyle(
-                        color: c.accent,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 13.sp,
+              // Optional deliverables (creation only — managed elsewhere once
+              // the course exists)
+              if (!_isEditing) ...[
+                Row(
+                  children: [
+                    Expanded(
+                        child: _FieldLabel(CoursesStrings.optionalDeliverables)),
+                    TextButton.icon(
+                      onPressed: _addDeliverable,
+                      icon: Icon(Icons.add_rounded, size: 18.sp, color: c.accent),
+                      label: Text(
+                        CoursesStrings.addAction,
+                        style: TextStyle(
+                          color: c.accent,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 13.sp,
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 4.h),
-              if (_deliverables.isEmpty)
-                Text(
-                  CoursesStrings.noDeliverablesYet,
-                  style: TextStyle(
-                    fontSize: 12.5.sp,
-                    color: c.textMuted,
-                    height: 1.4,
-                  ),
-                )
-              else
-                for (final d in _deliverables)
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 8.h),
-                    child: _DeliverableChip(
-                      deliverable: d,
-                      color: courseColor(context, _color),
-                      onRemove: () => _removeDeliverable(d),
+                  ],
+                ),
+                SizedBox(height: 4.h),
+                if (_deliverables.isEmpty)
+                  Text(
+                    CoursesStrings.noDeliverablesYet,
+                    style: TextStyle(
+                      fontSize: 12.5.sp,
+                      color: c.textMuted,
+                      height: 1.4,
                     ),
-                  ),
+                  )
+                else
+                  for (final d in _deliverables)
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 8.h),
+                      child: _DeliverableChip(
+                        deliverable: d,
+                        color: courseColor(context, _color),
+                        onRemove: () => _removeDeliverable(d),
+                      ),
+                    ),
+              ],
 
               if (_error != null) ...[
                 SizedBox(height: 12.h),
@@ -267,7 +312,9 @@ class _CourseFormSheetState extends State<_CourseFormSheet> {
                               size: 18.sp, color: Colors.white),
                           SizedBox(width: 8.w),
                           Text(
-                            CoursesStrings.createCourse,
+                            _isEditing
+                                ? CoursesStrings.saveChanges
+                                : CoursesStrings.createCourse,
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w700,

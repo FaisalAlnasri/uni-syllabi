@@ -60,7 +60,6 @@ class _CourseCard extends StatelessWidget {
     final c = context.c;
     final color = courseColor(context, course.color);
     final count = course.deliverables.length;
-    final next = course.nextDeliverable;
 
     return Material(
       color: c.surface,

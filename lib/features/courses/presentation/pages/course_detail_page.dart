@@ -8,6 +8,7 @@ import '../../domain/entities/course.dart';
 import '../../domain/entities/deliverable.dart';
 import '../courses_strings.dart';
 import '../cubit/course_cubit.dart';
+import '../widgets/course_form_sheet.dart';
 import '../widgets/deliverable_detail_sheet.dart';
 import '../widgets/deliverable_form_sheet.dart';
 import '../widgets/type_glyph.dart';
@@ -39,7 +40,16 @@ class CourseDetailPage extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: c.background,
-      appBar: AppBar(title: Text(live.title)),
+      appBar: AppBar(
+        title: Text(live.title),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.edit_outlined),
+            tooltip: CoursesStrings.editCourse,
+            onPressed: () => showEditCourseSheet(context, live),
+          ),
+        ],
+      ),
       body: ListView(
         padding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 32.h),
         children: [

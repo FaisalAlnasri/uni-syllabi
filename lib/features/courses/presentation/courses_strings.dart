@@ -146,6 +146,8 @@ abstract final class CoursesStrings {
   static const String createCourse = 'إنشاء المقرر';
   static const String enterCourseTitle = 'يُرجى إدخال اسم المقرر';
   static const String courseCreated = 'تم إنشاء المقرر';
+  static const String editCourse = 'تعديل المقرر';
+  static const String courseUpdated = 'تم تحديث المقرر';
 
   // ── Deliverable type labels ─────────────────────────────────
   static const String typeExam = 'اختبار';
