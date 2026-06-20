@@ -127,7 +127,7 @@ class _DeliverableFormSheetState extends State<_DeliverableFormSheet> {
       type: _type,
       date: _date,
       weight: weight,
-      isClear: _date != null,
+      isClear: true,
     );
 
     Navigator.of(context).pop<_FormResult>(
