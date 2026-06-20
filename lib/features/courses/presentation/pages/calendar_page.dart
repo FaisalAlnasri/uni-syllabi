@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/theme/app_colors.dart';
@@ -82,7 +83,7 @@ class _CalendarPageState extends State<CalendarPage> {
             ),
             const _WeekdayRow(),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
+              padding: EdgeInsets.symmetric(horizontal: 12.w),
               child: _MonthGrid(
                 month: _month,
                 selected: _selected,
@@ -90,7 +91,7 @@ class _CalendarPageState extends State<CalendarPage> {
                 onSelect: (d) => setState(() => _selected = d),
               ),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8.h),
             Expanded(
               child: _DayAgenda(date: _selected, items: selectedItems),
             ),
@@ -118,13 +119,13 @@ class _MonthHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.c;
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 12),
+      padding: EdgeInsets.fromLTRB(20.w, 16.h, 20.w, 12.h),
       child: Row(
         children: [
           Text(
             DateFormat('MMMM yyyy', 'ar').format(month),
             style: TextStyle(
-              fontSize: 22,
+              fontSize: 22.sp,
               fontWeight: FontWeight.w800,
               color: c.textPrimary,
               letterSpacing: -0.4,
@@ -133,7 +134,7 @@ class _MonthHeader extends StatelessWidget {
           const Spacer(),
           // Directional chevrons so prev/next match reading direction.
           _RoundIcon(icon: Icons.chevron_left_rounded, onTap: onPrev),
-          const SizedBox(width: 8),
+          SizedBox(width: 8.w),
           _RoundIcon(icon: Icons.chevron_right_rounded, onTap: onNext),
         ],
       ),
@@ -152,15 +153,15 @@ class _RoundIcon extends StatelessWidget {
     return Material(
       color: c.surface,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(10.r),
         side: BorderSide(color: c.border),
       ),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(10.r),
         child: Padding(
-          padding: const EdgeInsets.all(6),
-          child: Icon(icon, size: 22, color: c.textSecondary),
+          padding: EdgeInsets.all(6.r),
+          child: Icon(icon, size: 22.sp, color: c.textSecondary),
         ),
       ),
     );
@@ -187,7 +188,7 @@ class _WeekdayRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.c;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
       child: Row(
         children: [
           for (final d in _labels())
@@ -196,7 +197,7 @@ class _WeekdayRow extends StatelessWidget {
                 child: Text(
                   d,
                   style: TextStyle(
-                    fontSize: 11,
+                    fontSize: 11.sp,
                     fontWeight: FontWeight.w700,
                     color: c.textMuted,
                   ),
@@ -271,16 +272,16 @@ class _MonthGrid extends StatelessWidget {
     return AspectRatio(
       aspectRatio: 1,
       child: Padding(
-        padding: const EdgeInsets.all(2.5),
+        padding: EdgeInsets.all(2.5.r),
         child: Material(
           color: isSelected ? c.accent : Colors.transparent,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(10.r),
           child: InkWell(
             onTap: () => onSelect(date),
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(10.r),
             child: Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(10.r),
                 border: isToday && !isSelected
                     ? Border.all(color: c.accent, width: 1.5)
                     : null,
@@ -291,7 +292,7 @@ class _MonthGrid extends StatelessWidget {
                   Text(
                     '$day',
                     style: TextStyle(
-                      fontSize: 13,
+                      fontSize: 13.sp,
                       fontWeight: isToday || isSelected
                           ? FontWeight.w800
                           : FontWeight.w500,
@@ -302,7 +303,7 @@ class _MonthGrid extends StatelessWidget {
                               : c.textPrimary,
                     ),
                   ),
-                  const SizedBox(height: 3),
+                  SizedBox(height: 3.h),
                   _Dots(items: items, onSurface: isSelected),
                 ],
               ),
@@ -322,16 +323,16 @@ class _Dots extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (items.isEmpty) return const SizedBox(height: 5);
+    if (items.isEmpty) return SizedBox(height: 5.h);
     final shown = items.take(3).toList();
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         for (final it in shown)
           Container(
-            width: 5,
-            height: 5,
-            margin: const EdgeInsets.symmetric(horizontal: 1),
+            width: 5.r,
+            height: 5.r,
+            margin: EdgeInsets.symmetric(horizontal: 1.w),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: onSurface
@@ -359,18 +360,18 @@ class _DayAgenda extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
         color: c.surface,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
         border: Border(top: BorderSide(color: c.borderSubtle)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(20, 18, 20, 12),
+            padding: EdgeInsets.fromLTRB(20.w, 18.h, 20.w, 12.h),
             child: Text(
               DateFormat('EEEE، d MMMM', 'ar').format(date),
               style: TextStyle(
-                fontSize: 15,
+                fontSize: 15.sp,
                 fontWeight: FontWeight.w700,
                 color: c.textPrimary,
               ),
@@ -383,19 +384,19 @@ class _DayAgenda extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(Icons.event_available_outlined,
-                            size: 28, color: c.textMuted),
-                        const SizedBox(height: 8),
+                            size: 28.sp, color: c.textMuted),
+                        SizedBox(height: 8.h),
                         Text(
                           CoursesStrings.nothingDueThisDay,
-                          style: TextStyle(fontSize: 13, color: c.textMuted),
+                          style: TextStyle(fontSize: 13.sp, color: c.textMuted),
                         ),
                       ],
                     ),
                   )
                 : ListView.separated(
-                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 120),
+                    padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 120.h),
                     itemCount: items.length,
-                    separatorBuilder: (_, _) => const SizedBox(height: 10),
+                    separatorBuilder: (_, _) => SizedBox(height: 10.h),
                     itemBuilder: (_, i) => _AgendaTile(
                       deliverable: items[i].deliverable,
                       course: items[i].course,
@@ -420,28 +421,28 @@ class _AgendaTile extends StatelessWidget {
     final color = courseColor(context, course.color);
     return Material(
       color: c.surfaceAlt,
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(12.r),
       child: InkWell(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(12.r),
         onTap: () => showDeliverableDetail(context, deliverable, course),
         child: Container(
-          padding: const EdgeInsets.all(12),
+          padding: EdgeInsets.all(12.r),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(12.r),
             border: Border.all(color: c.border),
           ),
           child: Row(
             children: [
               Container(
-                width: 36,
-                height: 36,
+                width: 36.r,
+                height: 36.r,
                 decoration: BoxDecoration(
                   color: color.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(9),
+                  borderRadius: BorderRadius.circular(9.r),
                 ),
-                child: Icon(typeIcon(deliverable.type), size: 17, color: color),
+                child: Icon(typeIcon(deliverable.type), size: 17.sp, color: color),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12.w),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -449,18 +450,18 @@ class _AgendaTile extends StatelessWidget {
                     Text(
                       course.title,
                       style: TextStyle(
-                        fontSize: 10.5,
+                        fontSize: 10.5.sp,
                         fontWeight: FontWeight.w700,
                         color: color,
                       ),
                     ),
-                    const SizedBox(height: 2),
+                    SizedBox(height: 2.h),
                     Text(
                       deliverable.title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 14.sp,
                         fontWeight: FontWeight.w600,
                         color: c.textPrimary,
                       ),
@@ -472,7 +473,7 @@ class _AgendaTile extends StatelessWidget {
                 Text(
                   deliverable.weightPercentage,
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: 12.sp,
                     fontWeight: FontWeight.w600,
                     color: c.textMuted,
                   ),

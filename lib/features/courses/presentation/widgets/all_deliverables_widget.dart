@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/theme/app_colors.dart';
@@ -97,14 +98,14 @@ class _AllDeliverablesWidgetState extends State<AllDeliverablesWidget> {
   Widget _liveSection(BuildContext context, _Bucket bucket, List<_Item> items) {
     if (items.isEmpty) return const SizedBox.shrink();
     return Padding(
-      padding: const EdgeInsets.only(bottom: 4),
+      padding: EdgeInsets.only(bottom: 4.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           _SectionHeader(bucket: bucket, count: items.length),
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
           _TimelineSection(items: items, bucket: bucket),
-          const SizedBox(height: 12),
+          SizedBox(height: 12.h),
         ],
       ),
     );
@@ -112,7 +113,7 @@ class _AllDeliverablesWidgetState extends State<AllDeliverablesWidget> {
 
   Widget _pastSection(BuildContext context, List<_Item> items) {
     return Padding(
-      padding: const EdgeInsets.only(top: 4),
+      padding: EdgeInsets.only(top: 4.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -123,7 +124,7 @@ class _AllDeliverablesWidgetState extends State<AllDeliverablesWidget> {
             onTap: () => setState(() => _pastExpanded = !_pastExpanded),
           ),
           if (_pastExpanded) ...[
-            const SizedBox(height: 8),
+            SizedBox(height: 8.h),
             _TimelineSection(items: items, bucket: _Bucket.past),
           ],
         ],
@@ -182,32 +183,32 @@ class _SectionHeader extends StatelessWidget {
     final emphasised = bucket == _Bucket.today;
 
     final row = Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
+      padding: EdgeInsets.symmetric(vertical: 4.h),
       child: Row(
         children: [
-          Icon(bucket.icon, size: 15, color: tone),
-          const SizedBox(width: 7),
+          Icon(bucket.icon, size: 15.sp, color: tone),
+          SizedBox(width: 7.w),
           Text(
             bucket.label,
             style: TextStyle(
-              fontSize: 13,
+              fontSize: 13.sp,
               fontWeight: emphasised ? FontWeight.w800 : FontWeight.w700,
               color: emphasised ? c.textPrimary : c.textSecondary,
             ),
           ),
-          const SizedBox(width: 7),
+          SizedBox(width: 7.w),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 1),
+            padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 1.h),
             decoration: BoxDecoration(
               color: emphasised
                   ? tone.withValues(alpha: 0.14)
                   : c.surfaceMuted,
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(8.r),
             ),
             child: Text(
               '$count',
               style: TextStyle(
-                fontSize: 11,
+                fontSize: 11.sp,
                 fontWeight: FontWeight.w700,
                 color: emphasised ? tone : c.textMuted,
               ),
@@ -219,7 +220,7 @@ class _SectionHeader extends StatelessWidget {
               turns: expanded! ? 0.5 : 0,
               duration: const Duration(milliseconds: 180),
               child: Icon(Icons.keyboard_arrow_down_rounded,
-                  size: 20, color: c.textMuted),
+                  size: 20.sp, color: c.textMuted),
             ),
         ],
       ),
@@ -230,7 +231,7 @@ class _SectionHeader extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(10.r),
         child: row,
       ),
     );
@@ -281,24 +282,24 @@ class _TimelineItem extends StatelessWidget {
     final hasWarning = deliverable.confidenceNotes != null;
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
+      padding: EdgeInsets.only(bottom: 8.h),
       child: IntrinsicHeight(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             // Spine sits on the start side (mirrors correctly under RTL).
             SizedBox(
-              width: 28,
+              width: 28.w,
               child: Column(
                 children: [
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20.h),
                   _SpineDot(
                     color: color,
                     bucket: bucket,
                     hasWarning: hasWarning,
                   ),
                   if (!isLast)
-                    Expanded(child: Container(width: 1.5, color: c.spineLine)),
+                    Expanded(child: Container(width: 1.5.w, color: c.spineLine)),
                 ],
               ),
             ),
@@ -342,8 +343,8 @@ class _SpineDot extends StatelessWidget {
 
     // Today is filled (solid presence); everything else is an outlined ring.
     return Container(
-      width: isToday ? 12 : 10,
-      height: isToday ? 12 : 10,
+      width: isToday ? 12.r : 10.r,
+      height: isToday ? 12.r : 10.r,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: isToday
@@ -387,41 +388,41 @@ class _DeliverableCard extends StatelessWidget {
       opacity: _isPast ? 0.62 : 1.0,
       child: Material(
         color: c.surface,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(12.r),
         child: InkWell(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(12.r),
           onTap: () => showDeliverableDetail(context, deliverable, course),
           child: Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(12.r),
               border: Border.all(color: borderColor, width: borderWidth),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
-                  height: 3,
+                  height: 3.h,
                   decoration: BoxDecoration(
                     color: color,
                     borderRadius:
-                        const BorderRadius.vertical(top: Radius.circular(12)),
+                        BorderRadius.vertical(top: Radius.circular(12.r)),
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(10),
+                  padding: EdgeInsets.all(10.r),
                   child: Row(
                     children: [
                       Container(
-                        width: 34,
-                        height: 34,
+                        width: 34.r,
+                        height: 34.r,
                         decoration: BoxDecoration(
                           color: color.withValues(alpha: 0.12),
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(8.r),
                         ),
                         child: Icon(typeIcon(deliverable.type),
-                            size: 16, color: color),
+                            size: 16.sp, color: color),
                       ),
-                      const SizedBox(width: 10),
+                      SizedBox(width: 10.w),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -432,19 +433,19 @@ class _DeliverableCard extends StatelessWidget {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                fontSize: 10,
+                                fontSize: 10.sp,
                                 fontWeight: FontWeight.w600,
                                 color: color,
                                 letterSpacing: 0.2,
                               ),
                             ),
-                            const SizedBox(height: 2),
+                            SizedBox(height: 2.h),
                             Text(
                               deliverable.title,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                fontSize: 13,
+                                fontSize: 13.sp,
                                 fontWeight: FontWeight.w600,
                                 color: _isPast ? c.textSecondary : c.textPrimary,
                               ),
@@ -452,14 +453,14 @@ class _DeliverableCard extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const SizedBox(width: 8),
+                      SizedBox(width: 8.w),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           _DatePill(deliverable: deliverable, bucket: bucket),
                           if (_trailingBadges(context).isNotEmpty) ...[
-                            const SizedBox(height: 5),
+                            SizedBox(height: 5.h),
                             Row(
                               mainAxisSize: MainAxisSize.min,
                               children: _trailingBadges(context),
@@ -485,7 +486,7 @@ class _DeliverableCard extends StatelessWidget {
     return [
       if (hasWarning && !_isPast) _Badge.needsReview(context),
       if (deliverable.weight != null) ...[
-        if (hasWarning && !_isPast) const SizedBox(width: 4),
+        if (hasWarning && !_isPast) SizedBox(width: 4.w),
         _Badge.weight(context, deliverable.weightPercentage),
       ],
     ];
@@ -508,15 +509,15 @@ class _DatePill extends StatelessWidget {
     final (label, fg, emphasise) = _content(context, c);
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 3.h),
       decoration: BoxDecoration(
         color: emphasise ? fg.withValues(alpha: 0.12) : Colors.transparent,
-        borderRadius: BorderRadius.circular(7),
+        borderRadius: BorderRadius.circular(7.r),
       ),
       child: Text(
         label,
         style: TextStyle(
-          fontSize: 12,
+          fontSize: 12.sp,
           fontWeight: emphasise ? FontWeight.w800 : FontWeight.w600,
           color: fg,
         ),
@@ -566,24 +567,24 @@ class _ConfidenceNote extends StatelessWidget {
     final c = context.c;
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(10, 7, 10, 9),
+      padding: EdgeInsets.fromLTRB(10.w, 7.h, 10.w, 9.h),
       decoration: BoxDecoration(
         color: c.warningBg,
-        borderRadius: const BorderRadius.vertical(bottom: Radius.circular(11)),
+        borderRadius: BorderRadius.vertical(bottom: Radius.circular(11.r)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsetsDirectional.only(top: 1),
+            padding: EdgeInsetsDirectional.only(top: 1.h),
             child:
-                Icon(Icons.info_outline_rounded, size: 13, color: c.warningFg),
+                Icon(Icons.info_outline_rounded, size: 13.sp, color: c.warningFg),
           ),
-          const SizedBox(width: 6),
+          SizedBox(width: 6.w),
           Expanded(
             child: Text(
               note,
-              style: TextStyle(fontSize: 11, color: c.warningFg, height: 1.45),
+              style: TextStyle(fontSize: 11.sp, color: c.warningFg, height: 1.45),
             ),
           ),
         ],
@@ -623,22 +624,22 @@ class _Badge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+      padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
       decoration: BoxDecoration(
         color: bg,
-        borderRadius: BorderRadius.circular(4),
+        borderRadius: BorderRadius.circular(4.r),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           if (icon != null) ...[
-            Icon(icon, size: 9, color: fg),
-            const SizedBox(width: 2),
+            Icon(icon, size: 9.sp, color: fg),
+            SizedBox(width: 2.w),
           ],
           Text(
             label,
             style: TextStyle(
-              fontSize: 10,
+              fontSize: 10.sp,
               fontWeight: FontWeight.w600,
               color: fg,
             ),
@@ -658,33 +659,33 @@ class _EmptyState extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.c;
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 48),
+      padding: EdgeInsets.symmetric(vertical: 48.h),
       child: Column(
         children: [
           Container(
-            width: 64,
-            height: 64,
+            width: 64.r,
+            height: 64.r,
             decoration: BoxDecoration(
               color: c.surfaceMuted,
               shape: BoxShape.circle,
             ),
             child: Icon(Icons.event_available_outlined,
-                size: 30, color: c.textMuted),
+                size: 30.sp, color: c.textMuted),
           ),
-          const SizedBox(height: 14),
+          SizedBox(height: 14.h),
           Text(
             CoursesStrings.nothingScheduled,
             style: TextStyle(
-              fontSize: 15,
+              fontSize: 15.sp,
               fontWeight: FontWeight.w700,
               color: c.textPrimary,
             ),
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: 4.h),
           Text(
             CoursesStrings.addSyllabusHint,
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 13, color: c.textMuted, height: 1.4),
+            style: TextStyle(fontSize: 13.sp, color: c.textMuted, height: 1.4),
           ),
         ],
       ),

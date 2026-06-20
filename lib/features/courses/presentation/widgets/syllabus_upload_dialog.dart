@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/router/app_routes.dart';
@@ -63,63 +64,63 @@ class _SyllabusUploadDialogState extends State<SyllabusUploadDialog> {
   Widget build(BuildContext context) {
     final c = context.c;
     return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-      insetPadding: const EdgeInsets.symmetric(horizontal: 24),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24.r)),
+      insetPadding: EdgeInsets.symmetric(horizontal: 24.w),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
+        padding: EdgeInsets.fromLTRB(24.w, 28.h, 24.w, 24.h),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              width: 60,
-              height: 60,
+              width: 60.r,
+              height: 60.r,
               decoration: BoxDecoration(
                 color: c.accent.withValues(alpha: 0.14),
-                borderRadius: BorderRadius.circular(18),
+                borderRadius: BorderRadius.circular(18.r),
               ),
               child: Icon(
                 Icons.auto_awesome_rounded,
-                size: 28,
+                size: 28.sp,
                 color: c.accent,
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16.h),
             Text(
               CoursesStrings.addACourse,
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 18.sp,
                 fontWeight: FontWeight.w700,
                 color: c.textPrimary,
                 letterSpacing: -0.3,
               ),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8.h),
             Text(
               CoursesStrings.uploadSubtitle,
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 13.5,
+                fontSize: 13.5.sp,
                 color: c.textSecondary,
                 height: 1.4,
               ),
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: 24.h),
             if (_phase == _Phase.error) ...[
               Container(
-                padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+                padding: EdgeInsets.fromLTRB(12.w, 10.h, 12.w, 10.h),
                 decoration: BoxDecoration(
                   color: c.warningBg,
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(10.r),
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.error_outline, size: 16, color: c.warningFg),
-                    const SizedBox(width: 8),
+                    Icon(Icons.error_outline, size: 16.sp, color: c.warningFg),
+                    SizedBox(width: 8.w),
                     Expanded(
                       child: Text(
                         _errorMessage ?? CoursesStrings.unknownError,
                         style: TextStyle(
-                          fontSize: 12.5,
+                          fontSize: 12.5.sp,
                           color: c.warningFg,
                           fontWeight: FontWeight.w500,
                         ),
@@ -128,12 +129,12 @@ class _SyllabusUploadDialogState extends State<SyllabusUploadDialog> {
                   ],
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16.h),
             ],
             _phase == _Phase.loading
                 ? const _LoadingIndicator()
                 : _ChooseFileButton(onTap: _pickAndParse),
-            const SizedBox(height: 12),
+            SizedBox(height: 12.h),
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
               child: Text(
@@ -160,15 +161,15 @@ class _LoadingIndicator extends StatelessWidget {
     return Column(
       children: [
         SizedBox(
-          width: 26,
-          height: 26,
+          width: 26.r,
+          height: 26.r,
           child: CircularProgressIndicator(strokeWidth: 2.5, color: c.accent),
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12.h),
         Text(
           CoursesStrings.parsingSyllabus,
           style: TextStyle(
-            fontSize: 13,
+            fontSize: 13.sp,
             color: c.textSecondary,
             fontWeight: FontWeight.w500,
           ),
@@ -189,24 +190,24 @@ class _ChooseFileButton extends StatelessWidget {
       width: double.infinity,
       child: Material(
         color: c.accent,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(14.r),
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(14.r),
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 14),
+            padding: EdgeInsets.symmetric(vertical: 14.h),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.folder_open_outlined,
-                    size: 18, color: Colors.white),
-                const SizedBox(width: 8),
+                Icon(Icons.folder_open_outlined,
+                    size: 18.sp, color: Colors.white),
+                SizedBox(width: 8.w),
                 Text(
                   CoursesStrings.openFile,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w700,
-                    fontSize: 15,
+                    fontSize: 15.sp,
                     letterSpacing: -0.1,
                   ),
                 ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/theme/app_colors.dart';
@@ -105,13 +106,13 @@ class _DetailSheetState extends State<_DetailSheet> {
       child: Container(
         decoration: BoxDecoration(
           color: c.surface,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
         ),
         padding: EdgeInsets.fromLTRB(
-          20,
-          12,
-          20,
-          20 + MediaQuery.of(context).padding.bottom,
+          20.w,
+          12.h,
+          20.w,
+          20.h + MediaQuery.of(context).padding.bottom,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -119,27 +120,27 @@ class _DetailSheetState extends State<_DetailSheet> {
           children: [
             Center(
               child: Container(
-                width: 40,
-                height: 4,
+                width: 40.w,
+                height: 4.h,
                 decoration: BoxDecoration(
                   color: c.border,
-                  borderRadius: BorderRadius.circular(2),
+                  borderRadius: BorderRadius.circular(2.r),
                 ),
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16.h),
             Row(
               children: [
                 Container(
-                  width: 44,
-                  height: 44,
+                  width: 44.r,
+                  height: 44.r,
                   decoration: BoxDecoration(
                     color: color.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(12.r),
                   ),
                   child: Icon(typeIcon(_type), color: color),
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: 12.w),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -147,18 +148,18 @@ class _DetailSheetState extends State<_DetailSheet> {
                       Text(
                         widget.course.title,
                         style: TextStyle(
-                          fontSize: 12,
+                          fontSize: 12.sp,
                           fontWeight: FontWeight.w700,
                           color: color,
                           letterSpacing: 0.2,
                         ),
                       ),
-                      const SizedBox(height: 2),
+                      SizedBox(height: 2.h),
                       if (_editing)
                         TextField(
                           controller: _titleController,
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 16.sp,
                             fontWeight: FontWeight.w700,
                             color: c.textPrimary,
                           ),
@@ -174,7 +175,7 @@ class _DetailSheetState extends State<_DetailSheet> {
                         Text(
                           widget.deliverable.title,
                           style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 18.sp,
                             fontWeight: FontWeight.w700,
                             color: c.textPrimary,
                             height: 1.2,
@@ -187,13 +188,13 @@ class _DetailSheetState extends State<_DetailSheet> {
                   onPressed: () => setState(() => _editing = !_editing),
                   icon: Icon(
                     _editing ? Icons.close_rounded : Icons.edit_rounded,
-                    size: 20,
+                    size: 20.sp,
                     color: c.textMuted,
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16.h),
             if (_editing) ...[
               _EditSection(
                 label: CoursesStrings.type,
@@ -211,29 +212,29 @@ class _DetailSheetState extends State<_DetailSheet> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Icon(typeIcon(t),
-                                    size: 14, color: c.textSecondary),
-                                const SizedBox(width: 6),
+                                    size: 14.sp, color: c.textSecondary),
+                                SizedBox(width: 6.w),
                                 Text(typeLabel(t),
                                     style: TextStyle(
-                                        fontSize: 13, color: c.textPrimary)),
+                                        fontSize: 13.sp, color: c.textPrimary)),
                               ],
                             ),
                           ))
                       .toList(),
                 ),
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: 8.h),
               _EditSection(
                 label: CoursesStrings.weightPercentLabel,
                 child: SizedBox(
-                  width: 80,
+                  width: 80.w,
                   child: TextField(
                     controller: TextEditingController(text: _weightText)
                       ..selection =
                           TextSelection.collapsed(offset: _weightText.length),
                     keyboardType: TextInputType.number,
                     textAlign: TextAlign.end,
-                    style: TextStyle(fontSize: 13, color: c.textPrimary),
+                    style: TextStyle(fontSize: 13.sp, color: c.textPrimary),
                     decoration: InputDecoration(
                       isDense: true,
                       contentPadding: EdgeInsets.zero,
@@ -245,7 +246,7 @@ class _DetailSheetState extends State<_DetailSheet> {
                   ),
                 ),
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: 8.h),
               _EditSection(
                 label: CoursesStrings.dueDate,
                 child: GestureDetector(
@@ -255,14 +256,14 @@ class _DetailSheetState extends State<_DetailSheet> {
                         ? DateFormat('EEE، d MMM yyyy', 'ar').format(_date!)
                         : CoursesStrings.tapToSet,
                     style: TextStyle(
-                      fontSize: 13,
+                      fontSize: 13.sp,
                       color: hasDate ? c.textPrimary : c.accent,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
               SizedBox(
                 width: double.infinity,
                 child: _PrimaryButton(
@@ -294,23 +295,23 @@ class _DetailSheetState extends State<_DetailSheet> {
                 value: typeLabel(widget.deliverable.type),
               ),
               if (widget.deliverable.confidenceNotes != null) ...[
-                const SizedBox(height: 8),
+                SizedBox(height: 8.h),
                 Container(
-                  padding: const EdgeInsets.all(12),
+                  padding: EdgeInsets.all(12.r),
                   decoration: BoxDecoration(
                     color: c.warningBg,
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(12.r),
                   ),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(Icons.auto_awesome, size: 16, color: c.warningFg),
-                      const SizedBox(width: 8),
+                      Icon(Icons.auto_awesome, size: 16.sp, color: c.warningFg),
+                      SizedBox(width: 8.w),
                       Expanded(
                         child: Text(
                           widget.deliverable.confidenceNotes!,
                           style: TextStyle(
-                            fontSize: 12.5,
+                            fontSize: 12.5.sp,
                             color: c.warningFg,
                             height: 1.4,
                           ),
@@ -320,7 +321,7 @@ class _DetailSheetState extends State<_DetailSheet> {
                   ),
                 ),
               ],
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
               SizedBox(
                 width: double.infinity,
                 child: _PrimaryButton(
@@ -350,10 +351,10 @@ class _EditSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.c;
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
       decoration: BoxDecoration(
         color: c.surfaceAlt,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(10.r),
         border: Border.all(color: c.border),
       ),
       child: Row(
@@ -361,7 +362,7 @@ class _EditSection extends StatelessWidget {
           Text(
             label,
             style: TextStyle(
-              fontSize: 13,
+              fontSize: 13.sp,
               color: c.textSecondary,
               fontWeight: FontWeight.w500,
             ),
@@ -391,15 +392,15 @@ class _InfoRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.c;
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: EdgeInsets.symmetric(vertical: 8.h),
       child: Row(
         children: [
-          Icon(icon, size: 18, color: c.textMuted),
-          const SizedBox(width: 12),
+          Icon(icon, size: 18.sp, color: c.textMuted),
+          SizedBox(width: 12.w),
           Text(
             label,
             style: TextStyle(
-              fontSize: 13,
+              fontSize: 13.sp,
               color: c.textSecondary,
               fontWeight: FontWeight.w500,
             ),
@@ -410,7 +411,7 @@ class _InfoRow extends StatelessWidget {
               value,
               textAlign: TextAlign.end,
               style: TextStyle(
-                fontSize: 13.5,
+                fontSize: 13.5.sp,
                 color: valueColor ?? c.textPrimary,
                 fontWeight: FontWeight.w600,
               ),
@@ -438,23 +439,23 @@ class _PrimaryButton extends StatelessWidget {
     final c = context.c;
     return Material(
       color: c.accent,
-      borderRadius: BorderRadius.circular(14),
+      borderRadius: BorderRadius.circular(14.r),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(14.r),
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 15),
+          padding: EdgeInsets.symmetric(vertical: 15.h),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, size: 18, color: Colors.white),
-              const SizedBox(width: 8),
+              Icon(icon, size: 18.sp, color: Colors.white),
+              SizedBox(width: 8.w),
               Text(
                 label,
-                style: const TextStyle(
+                style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w700,
-                  fontSize: 15,
+                  fontSize: 15.sp,
                 ),
               ),
             ],

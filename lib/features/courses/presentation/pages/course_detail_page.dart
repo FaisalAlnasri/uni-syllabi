@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/theme/app_colors.dart';
@@ -43,20 +44,20 @@ class CourseDetailPage extends StatelessWidget {
       backgroundColor: c.background,
       appBar: AppBar(title: Text(live.title)),
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
+        padding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 32.h),
         children: [
           _SummaryCard(
             color: color,
             itemCount: live.deliverables.length,
             totalWeight: totalWeight,
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20.h),
           Padding(
-            padding: const EdgeInsetsDirectional.only(start: 4, bottom: 10),
+            padding: EdgeInsetsDirectional.only(start: 4.w, bottom: 10.h),
             child: Text(
               CoursesStrings.deliverablesSection,
               style: TextStyle(
-                fontSize: 11,
+                fontSize: 11.sp,
                 fontWeight: FontWeight.w700,
                 color: c.textMuted,
                 letterSpacing: 0.8,
@@ -65,7 +66,7 @@ class CourseDetailPage extends StatelessWidget {
           ),
           for (final d in sorted)
             Padding(
-              padding: const EdgeInsets.only(bottom: 10),
+              padding: EdgeInsets.only(bottom: 10.h),
               child: _DeliverableTile(
                 deliverable: d,
                 course: live,
@@ -93,7 +94,7 @@ class _SummaryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(18.r),
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -102,20 +103,20 @@ class _SummaryCard extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: color.withValues(alpha: 0.3),
-            blurRadius: 18,
-            offset: const Offset(0, 8),
+            blurRadius: 18.r,
+            offset: Offset(0, 8.h),
           ),
         ],
       ),
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(20.r),
       child: Row(
         children: [
           _Stat(value: '$itemCount', label: CoursesStrings.deliverables),
           Container(
-            width: 1,
-            height: 36,
+            width: 1.w,
+            height: 36.h,
             color: Colors.white.withValues(alpha: 0.25),
-            margin: const EdgeInsets.symmetric(horizontal: 20),
+            margin: EdgeInsets.symmetric(horizontal: 20.w),
           ),
           _Stat(
             value: totalWeight > 0
@@ -141,18 +142,18 @@ class _Stat extends StatelessWidget {
       children: [
         Text(
           value,
-          style: const TextStyle(
+          style: TextStyle(
             color: Colors.white,
-            fontSize: 24,
+            fontSize: 24.sp,
             fontWeight: FontWeight.w800,
           ),
         ),
-        const SizedBox(height: 2),
+        SizedBox(height: 2.h),
         Text(
           label,
           style: TextStyle(
             color: Colors.white.withValues(alpha: 0.8),
-            fontSize: 12,
+            fontSize: 12.sp,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -180,14 +181,14 @@ class _DeliverableTile extends StatelessWidget {
 
     return Material(
       color: c.surface,
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(12.r),
       child: InkWell(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(12.r),
         onTap: () => showDeliverableDetail(context, deliverable, course),
         child: Container(
-          padding: const EdgeInsets.all(12),
+          padding: EdgeInsets.all(12.r),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(12.r),
             border: Border.all(
               color: hasWarning ? c.warning : c.border,
               width: hasWarning ? 1.5 : 1,
@@ -196,15 +197,15 @@ class _DeliverableTile extends StatelessWidget {
           child: Row(
             children: [
               Container(
-                width: 38,
-                height: 38,
+                width: 38.r,
+                height: 38.r,
                 decoration: BoxDecoration(
                   color: color.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(10.r),
                 ),
-                child: Icon(typeIcon(deliverable.type), size: 18, color: color),
+                child: Icon(typeIcon(deliverable.type), size: 18.sp, color: color),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12.w),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -214,19 +215,19 @@ class _DeliverableTile extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 14.sp,
                         fontWeight: FontWeight.w600,
                         color: c.textPrimary,
                       ),
                     ),
-                    const SizedBox(height: 3),
+                    SizedBox(height: 3.h),
                     Text(
                       hasDate
                           ? DateFormat('EEE، d MMM yyyy', 'ar')
                               .format(deliverable.date!)
                           : (deliverable.rawDateText ?? CoursesStrings.dateTba),
                       style: TextStyle(
-                        fontSize: 12,
+                        fontSize: 12.sp,
                         color: hasDate ? c.textSecondary : c.warning,
                         fontStyle:
                             hasDate ? FontStyle.normal : FontStyle.italic,
@@ -239,7 +240,7 @@ class _DeliverableTile extends StatelessWidget {
                 Text(
                   deliverable.weightPercentage,
                   style: TextStyle(
-                    fontSize: 13,
+                    fontSize: 13.sp,
                     fontWeight: FontWeight.w700,
                     color: c.textSecondary,
                   ),

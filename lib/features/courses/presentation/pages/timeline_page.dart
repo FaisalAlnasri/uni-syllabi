@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/theme/app_colors.dart';
@@ -27,23 +28,23 @@ class TimelinePage extends StatelessWidget {
       body: SafeArea(
         bottom: false,
         child: ListView(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 120),
+          padding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 120.h),
           children: [
             _Header(
               courseCount: cubit.courses.length,
               onExport: () => _export(context, cubit),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 12.h),
             if (cubit.uncertainCount > 0) ...[
               _UncertainBanner(count: cubit.uncertainCount),
-              const SizedBox(height: 12),
+              SizedBox(height: 12.h),
             ],
             if (upcoming != null) ...[
               _UpcomingCard(
                 deliverable: upcoming.deliverable,
                 course: upcoming.course,
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24.h),
             ],
             AllDeliverablesWidget(
               courses: cubit.courses,
@@ -82,7 +83,7 @@ class _Header extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.c;
     return Padding(
-      padding: const EdgeInsetsDirectional.fromSTEB(4, 12, 0, 4),
+      padding: EdgeInsetsDirectional.fromSTEB(4.w, 12.h, 0, 4.h),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -93,16 +94,16 @@ class _Header extends StatelessWidget {
                 Text(
                   _greeting,
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 12.sp,
                     color: c.textSecondary,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                const SizedBox(height: 2),
+                SizedBox(height: 2.h),
                 Text(
                   DateFormat('EEEE، d MMMM', 'ar').format(DateTime.now()),
                   style: TextStyle(
-                    fontSize: 26,
+                    fontSize: 18.sp,
                     fontWeight: FontWeight.w800,
                     color: c.textPrimary,
                     letterSpacing: -0.5,
@@ -129,15 +130,15 @@ class _IconButton extends StatelessWidget {
     return Material(
       color: c.surface,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(12.r),
         side: BorderSide(color: c.border),
       ),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(12.r),
         child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Icon(icon, size: 20, color: c.textSecondary),
+          padding: EdgeInsets.all(10.r),
+          child: Icon(icon, size: 20.sp, color: c.textSecondary),
         ),
       ),
     );
@@ -162,11 +163,11 @@ class _UpcomingCard extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(22.r),
         onTap: () => showDeliverableDetail(context, deliverable, course),
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(22),
+            borderRadius: BorderRadius.circular(22.r),
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -178,12 +179,12 @@ class _UpcomingCard extends StatelessWidget {
             boxShadow: [
               BoxShadow(
                 color: base.withValues(alpha: 0.35),
-                blurRadius: 20,
-                offset: const Offset(0, 10),
+                blurRadius: 20.r,
+                offset: Offset(0, 10.h),
               ),
             ],
           ),
-          padding: const EdgeInsets.all(20),
+          padding: EdgeInsets.all(20.r),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -194,14 +195,14 @@ class _UpcomingCard extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(typeIcon(deliverable.type),
-                            size: 12, color: Colors.white),
-                        const SizedBox(width: 5),
+                            size: 12.sp, color: Colors.white),
+                        SizedBox(width: 5.w),
                         Text(
                           typeLabel(deliverable.type),
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.w700,
-                            fontSize: 12,
+                            fontSize: 12.sp,
                             letterSpacing: 0.2,
                           ),
                         ),
@@ -217,62 +218,62 @@ class _UpcomingCard extends StatelessWidget {
                             : daysLeft == 1
                                 ? CoursesStrings.tomorrow
                                 : CoursesStrings.inDays(daysLeft),
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w700,
-                          fontSize: 12,
+                          fontSize: 12.sp,
                         ),
                       ),
                     ),
                 ],
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16.h),
               Text(
                 deliverable.title,
-                style: const TextStyle(
+                style: TextStyle(
                   color: Colors.white,
-                  fontSize: 22,
+                  fontSize: 22.sp,
                   fontWeight: FontWeight.w700,
                   letterSpacing: -0.4,
                   height: 1.2,
                 ),
               ),
-              const SizedBox(height: 6),
+              SizedBox(height: 6.h),
               Text(
                 course.title,
                 style: TextStyle(
                   color: Colors.white.withValues(alpha: 0.78),
-                  fontSize: 14,
+                  fontSize: 14.sp,
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16.h),
               Row(
                 children: [
-                  const Icon(Icons.calendar_today_outlined,
-                      size: 14, color: Colors.white70),
-                  const SizedBox(width: 6),
+                  Icon(Icons.calendar_today_outlined,
+                      size: 14.sp, color: Colors.white70),
+                  SizedBox(width: 6.w),
                   Text(
                     hasDate
                         ? DateFormat('EEE، d MMM', 'ar').format(deliverable.date!)
                         : (deliverable.rawDateText ?? CoursesStrings.dateTba),
                     style: TextStyle(
                       color: Colors.white.withValues(alpha: 0.9),
-                      fontSize: 13,
+                      fontSize: 13.sp,
                       fontWeight: FontWeight.w500,
                       fontStyle: hasDate ? FontStyle.normal : FontStyle.italic,
                     ),
                   ),
                   if (deliverable.weight != null) ...[
-                    const SizedBox(width: 12),
-                    const Icon(Icons.bar_chart_rounded,
-                        size: 14, color: Colors.white70),
-                    const SizedBox(width: 4),
+                    SizedBox(width: 12.w),
+                    Icon(Icons.bar_chart_rounded,
+                        size: 14.sp, color: Colors.white70),
+                    SizedBox(width: 4.w),
                     Text(
                       deliverable.weightPercentage,
                       style: TextStyle(
                         color: Colors.white.withValues(alpha: 0.9),
-                        fontSize: 13,
+                        fontSize: 13.sp,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -280,31 +281,31 @@ class _UpcomingCard extends StatelessWidget {
                 ],
               ),
               if (!deliverable.isClear) ...[
-                const SizedBox(height: 14),
+                SizedBox(height: 14.h),
                 Container(
-                  padding: const EdgeInsets.fromLTRB(12, 9, 12, 9),
+                  padding: EdgeInsets.fromLTRB(12.w, 9.h, 12.w, 9.h),
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.16),
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(12.r),
                   ),
                   child: Row(
                     children: [
-                      const Icon(Icons.auto_awesome,
-                          size: 14, color: Colors.white),
-                      const SizedBox(width: 8),
+                      Icon(Icons.auto_awesome,
+                          size: 14.sp, color: Colors.white),
+                      SizedBox(width: 8.w),
                       Expanded(
                         child: Text(
                           deliverable.confidenceNotes ??
                               CoursesStrings.aiNeedsHelp,
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: Colors.white,
-                            fontSize: 12,
+                            fontSize: 12.sp,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
                       ),
-                      const Icon(Icons.chevron_right_rounded,
-                          size: 18, color: Colors.white70),
+                      Icon(Icons.chevron_right_rounded,
+                          size: 18.sp, color: Colors.white70),
                     ],
                   ),
                 ),
@@ -318,10 +319,10 @@ class _UpcomingCard extends StatelessWidget {
 
   Widget _glassPill({required Widget child}) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.22),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(20.r),
       ),
       child: child,
     );
@@ -339,31 +340,31 @@ class _UncertainBanner extends StatelessWidget {
     final c = context.c;
     return Material(
       color: c.warningBg,
-      borderRadius: BorderRadius.circular(14),
+      borderRadius: BorderRadius.circular(14.r),
       child: InkWell(
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(14.r),
         onTap: () => _showUncertainSheet(context),
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+          padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(14.r),
             border: Border.all(color: c.warning.withValues(alpha: 0.4)),
           ),
           child: Row(
             children: [
-              Icon(Icons.auto_awesome, size: 16, color: c.warningFg),
-              const SizedBox(width: 10),
+              Icon(Icons.auto_awesome, size: 16.sp, color: c.warningFg),
+              SizedBox(width: 10.w),
               Expanded(
                 child: Text(
                   CoursesStrings.uncertainBanner(count),
                   style: TextStyle(
-                    fontSize: 13,
+                    fontSize: 13.sp,
                     fontWeight: FontWeight.w600,
                     color: c.warningFg,
                   ),
                 ),
               ),
-              Icon(Icons.chevron_right_rounded, size: 18, color: c.warningFg),
+              Icon(Icons.chevron_right_rounded, size: 18.sp, color: c.warningFg),
             ],
           ),
         ),
@@ -406,20 +407,20 @@ class _UncertainSheet extends StatelessWidget {
       builder: (_, controller) => Container(
         decoration: BoxDecoration(
           color: c.surface,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
         ),
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+              padding: EdgeInsets.fromLTRB(20.w, 16.h, 20.w, 0),
               child: Row(
                 children: [
-                  Icon(Icons.auto_awesome, size: 18, color: c.warning),
-                  const SizedBox(width: 8),
+                  Icon(Icons.auto_awesome, size: 18.sp, color: c.warning),
+                  SizedBox(width: 8.w),
                   Text(
                     CoursesStrings.itemsNeedingReview,
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.w700,
                       color: c.textPrimary,
                     ),
@@ -428,7 +429,7 @@ class _UncertainSheet extends StatelessWidget {
                   Text(
                     '${uncertain.length}',
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 14.sp,
                       fontWeight: FontWeight.w600,
                       color: c.textMuted,
                     ),
@@ -436,24 +437,24 @@ class _UncertainSheet extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 4),
+            SizedBox(height: 4.h),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.symmetric(horizontal: 20.w),
               child: Align(
                 alignment: AlignmentDirectional.centerStart,
                 child: Text(
                   CoursesStrings.tapToSetExactDate,
-                  style: TextStyle(fontSize: 12.5, color: c.textSecondary),
+                  style: TextStyle(fontSize: 12.5.sp, color: c.textSecondary),
                 ),
               ),
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12.h),
             Expanded(
               child: ListView.separated(
                 controller: controller,
-                padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
+                padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 32.h),
                 itemCount: uncertain.length,
-                separatorBuilder: (_, _) => const SizedBox(height: 8),
+                separatorBuilder: (_, _) => SizedBox(height: 8.h),
                 itemBuilder: (ctx, i) {
                   final item = uncertain[i];
                   return _UncertainTile(
@@ -482,28 +483,28 @@ class _UncertainTile extends StatelessWidget {
 
     return Material(
       color: c.surfaceAlt,
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(12.r),
       child: InkWell(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(12.r),
         onTap: () => _pickDate(context),
         child: Container(
-          padding: const EdgeInsets.all(12),
+          padding: EdgeInsets.all(12.r),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(12.r),
             border: Border.all(color: c.warning.withValues(alpha: 0.5)),
           ),
           child: Row(
             children: [
               Container(
-                width: 36,
-                height: 36,
+                width: 36.r,
+                height: 36.r,
                 decoration: BoxDecoration(
                   color: color.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(9),
+                  borderRadius: BorderRadius.circular(9.r),
                 ),
-                child: Icon(Icons.auto_awesome, size: 16, color: c.warning),
+                child: Icon(Icons.auto_awesome, size: 16.sp, color: c.warning),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12.w),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -511,18 +512,18 @@ class _UncertainTile extends StatelessWidget {
                     Text(
                       course.title,
                       style: TextStyle(
-                        fontSize: 10.5,
+                        fontSize: 10.5.sp,
                         fontWeight: FontWeight.w700,
                         color: c.textMuted,
                       ),
                     ),
-                    const SizedBox(height: 2),
+                    SizedBox(height: 2.h),
                     Text(
                       deliverable.title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        fontSize: 13.5,
+                        fontSize: 13.5.sp,
                         fontWeight: FontWeight.w600,
                         color: c.textPrimary,
                       ),
@@ -531,7 +532,7 @@ class _UncertainTile extends StatelessWidget {
                       Text(
                         deliverable.rawDateText!,
                         style: TextStyle(
-                          fontSize: 11.5,
+                          fontSize: 11.5.sp,
                           fontStyle: FontStyle.italic,
                           color: c.warning,
                         ),
@@ -541,15 +542,15 @@ class _UncertainTile extends StatelessWidget {
               ),
               Container(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
                 decoration: BoxDecoration(
                   color: c.accent.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(8.r),
                 ),
                 child: Text(
                   CoursesStrings.setDate,
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: 12.sp,
                     fontWeight: FontWeight.w700,
                     color: c.accent,
                   ),

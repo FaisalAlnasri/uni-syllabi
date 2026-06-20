@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
@@ -51,9 +52,9 @@ class CourseConfirmationPage extends StatelessWidget {
         children: [
           Expanded(
             child: ListView.separated(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(16.r),
               itemCount: courses.length,
-              separatorBuilder: (_, _) => const SizedBox(height: 12),
+              separatorBuilder: (_, _) => SizedBox(height: 12.h),
               itemBuilder: (_, i) => _CourseCard(course: courses[i]),
             ),
           ),
@@ -82,7 +83,7 @@ class _CourseCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: c.surface,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(16.r),
         border: Border.all(color: c.border),
       ),
       clipBehavior: Clip.antiAlias,
@@ -90,16 +91,16 @@ class _CourseCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
+            padding: EdgeInsets.fromLTRB(16.w, 14.h, 16.w, 14.h),
             color: color,
             child: Row(
               children: [
                 Expanded(
                   child: Text(
                     course.title,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: Colors.white,
-                      fontSize: 16,
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.w700,
                       letterSpacing: -0.2,
                     ),
@@ -107,16 +108,16 @@ class _CourseCard extends StatelessWidget {
                 ),
                 Container(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      EdgeInsets.symmetric(horizontal: 8.w, vertical: 3.h),
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.22),
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(20.r),
                   ),
                   child: Text(
                     CoursesStrings.itemsBadge(course.deliverables.length),
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: Colors.white,
-                      fontSize: 12,
+                      fontSize: 12.sp,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -161,20 +162,20 @@ class _DeliverableRow extends StatelessWidget {
             ? null
             : Border(bottom: BorderSide(color: c.borderSubtle)),
       ),
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+      padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 12.h),
       child: Row(
         children: [
           Container(
-            width: 32,
-            height: 32,
+            width: 32.r,
+            height: 32.r,
             decoration: BoxDecoration(
               color: courseColor.withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(8.r),
             ),
             child:
-                Icon(typeIcon(deliverable.type), size: 16, color: courseColor),
+                Icon(typeIcon(deliverable.type), size: 16.sp, color: courseColor),
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -185,7 +186,7 @@ class _DeliverableRow extends StatelessWidget {
                       child: Text(
                         deliverable.title,
                         style: TextStyle(
-                          fontSize: 13.5,
+                          fontSize: 13.5.sp,
                           fontWeight: FontWeight.w600,
                           color: c.textPrimary,
                         ),
@@ -195,17 +196,17 @@ class _DeliverableRow extends StatelessWidget {
                       Tooltip(
                         message: CoursesStrings.dateNeedsReview,
                         child: Icon(Icons.auto_awesome,
-                            size: 13, color: c.warning),
+                            size: 13.sp, color: c.warning),
                       ),
                   ],
                 ),
-                const SizedBox(height: 2),
+                SizedBox(height: 2.h),
                 Text(
                   hasDate
                       ? DateFormat('EEE، d MMM', 'ar').format(deliverable.date!)
                       : (deliverable.rawDateText ?? CoursesStrings.dateTba),
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: 12.sp,
                     color: hasDate ? c.textSecondary : c.warning,
                     fontStyle: hasDate ? FontStyle.normal : FontStyle.italic,
                   ),
@@ -214,11 +215,11 @@ class _DeliverableRow extends StatelessWidget {
             ),
           ),
           if (deliverable.weight != null) ...[
-            const SizedBox(width: 8),
+            SizedBox(width: 8.w),
             Text(
               deliverable.weightPercentage,
               style: TextStyle(
-                fontSize: 12,
+                fontSize: 12.sp,
                 fontWeight: FontWeight.w600,
                 color: c.textMuted,
               ),
@@ -252,17 +253,17 @@ class _ConfirmBar extends StatelessWidget {
         border: Border(top: BorderSide(color: c.border)),
       ),
       padding: EdgeInsets.fromLTRB(
-        16,
-        12,
-        16,
-        12 + MediaQuery.of(context).padding.bottom,
+        16.w,
+        12.h,
+        16.w,
+        12.h + MediaQuery.of(context).padding.bottom,
       ),
       child: Row(
         children: [
           Expanded(
               child: _OutlineButton(
                   label: CoursesStrings.cancel, onTap: onCancel)),
-          const SizedBox(width: 10),
+          SizedBox(width: 10.w),
           Expanded(
             flex: 2,
             child: _FilledButton(
@@ -285,19 +286,19 @@ class _FilledButton extends StatelessWidget {
     final c = context.c;
     return Material(
       color: c.accent,
-      borderRadius: BorderRadius.circular(14),
+      borderRadius: BorderRadius.circular(14.r),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(14.r),
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 14),
+          padding: EdgeInsets.symmetric(vertical: 14.h),
           child: Text(
             label,
             textAlign: TextAlign.center,
-            style: const TextStyle(
+            style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.w700,
-              fontSize: 15,
+              fontSize: 15.sp,
               letterSpacing: -0.1,
             ),
           ),
@@ -317,15 +318,15 @@ class _OutlineButton extends StatelessWidget {
     final c = context.c;
     return Material(
       color: c.surface,
-      borderRadius: BorderRadius.circular(14),
+      borderRadius: BorderRadius.circular(14.r),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(14.r),
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 14),
+          padding: EdgeInsets.symmetric(vertical: 14.h),
           decoration: BoxDecoration(
             border: Border.all(color: c.border),
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(14.r),
           ),
           child: Text(
             label,
@@ -333,7 +334,7 @@ class _OutlineButton extends StatelessWidget {
             style: TextStyle(
               color: c.textPrimary,
               fontWeight: FontWeight.w700,
-              fontSize: 14,
+              fontSize: 14.sp,
             ),
           ),
         ),
