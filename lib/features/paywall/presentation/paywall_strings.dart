@@ -33,4 +33,11 @@ abstract final class PaywallStrings {
       'النسخة الدائمة دفعة واحدة، والسنوية تتجدد تلقائيًا ويمكنك إلغاؤها في أي وقت';
   static const String successMessage = 'تم تفعيل النسخة المميزة 🎉';
   static const String cancelledMessage = 'تم إلغاء عملية الشراء';
+
+  // ── Legal links ────────────────────────────────────────────
+  // TODO: Replace these template URLs with your real links before release.
+  static const String privacyPolicyLabel = 'سياسة الخصوصية';
+  static const String termsOfUseLabel = 'شروط الاستخدام';
+  static const String privacyPolicyUrl = 'https://example.com/privacy';
+  static const String termsOfUseUrl = 'https://example.com/terms';
 }

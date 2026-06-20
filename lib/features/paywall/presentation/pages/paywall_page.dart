@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:purchases_flutter/purchases_flutter.dart' show Package;
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/config/app_config.dart';
 import '../../../../core/di/service_locator.dart';
@@ -202,13 +203,15 @@ class _PaywallContent extends StatelessWidget {
             onPressed: isBusy ? null : onRestore,
             child: const Text(PaywallStrings.restoreButton),
           ),
-          SizedBox(height: 8.h),
+          SizedBox(height: 4.h),
           Text(
             PaywallStrings.termsNote,
             style: context.textTheme.labelMedium
-                ?.copyWith(color: context.colors.outline),
+                ?.copyWith(color: context.colors.outline, fontSize: 10.sp),
             textAlign: TextAlign.center,
           ),
+          SizedBox(height: 8.h),
+          const _LegalLinks(),
           SizedBox(height: 24.h),
         ],
       ),
@@ -286,6 +289,68 @@ class _BenefitRow extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+// ── Legal links ──────────────────────────────────────────────────────────────
+
+class _LegalLinks extends StatelessWidget {
+  const _LegalLinks();
+
+  Future<void> _open(String url) async {
+    final uri = Uri.parse(url);
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final style = context.textTheme.labelMedium?.copyWith(
+      color: context.colors.outline,
+      decoration: TextDecoration.underline,
+      decorationColor: context.colors.outline,
+    );
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _LegalLink(
+          label: PaywallStrings.privacyPolicyLabel,
+          style: style,
+          onTap: () => _open(PaywallStrings.privacyPolicyUrl),
+        ),
+        Text(
+          ' • ',
+          style: context.textTheme.labelMedium
+              ?.copyWith(color: context.colors.outline),
+        ),
+        _LegalLink(
+          label: PaywallStrings.termsOfUseLabel,
+          style: style,
+          onTap: () => _open(PaywallStrings.termsOfUseUrl),
+        ),
+      ],
+    );
+  }
+}
+
+class _LegalLink extends StatelessWidget {
+  final String label;
+  final TextStyle? style;
+  final VoidCallback onTap;
+
+  const _LegalLink({
+    required this.label,
+    required this.style,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Text(label, style: style),
     );
   }
 }
