@@ -88,9 +88,14 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       backgroundColor: context.colors.surface,
       body: BlocConsumer<AuthCubit, AuthState>(
-        // Authenticated/Guest transitions are handled by the router redirect;
-        // nothing to do here beyond letting it rebuild.
-        listener: (context, state) {},
+        // When reached via an imperative push (e.g. from the profile page), the
+        // router redirect doesn't pop the pushed /login route on auth change, so
+        // navigate explicitly once the user is authenticated.
+        listener: (context, state) {
+          if (state is AuthAuthenticated) {
+            context.go(AppRoutes.home);
+          }
+        },
         builder: (context, state) {
           return SafeArea(
             child: Padding(

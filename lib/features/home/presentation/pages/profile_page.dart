@@ -17,8 +17,9 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<AuthCubit>();
+    final cubit = context.watch<AuthCubit>();
     final user = cubit.currentUser;
+    final isAuthenticated = user != null;
     final courseCount = context.watch<CourseCubit>().state.courses.length;
 
     return Scaffold(
@@ -98,12 +99,19 @@ class ProfilePage extends StatelessWidget {
 
           // ── Account ───────────────────────────────────────────
           _SectionLabel('الحساب'),
-          _SettingsTile(
-            icon: Icons.logout,
-            label: 'تسجيل الخروج',
-            isDestructive: true,
-            onTap: () => _confirmSignOut(context, cubit),
-          ),
+          if (isAuthenticated)
+            _SettingsTile(
+              trailingIcon: Icons.logout,
+              label: 'تسجيل الخروج',
+              isDestructive: true,
+              onTap: () => _confirmSignOut(context, cubit),
+            )
+          else
+            _SettingsTile(
+              trailingIcon: Icons.login,
+              label: 'تسجيل الدخول',
+              onTap: () => context.push(AppRoutes.login),
+            ),
         ],
       ),
     );
@@ -302,13 +310,15 @@ class _InfoTile extends StatelessWidget {
 // ── Settings tile ─────────────────────────────────────────────────────────────
 
 class _SettingsTile extends StatelessWidget {
-  final IconData icon;
+  final IconData? icon;
+  final IconData trailingIcon;
   final String label;
   final VoidCallback onTap;
   final bool isDestructive;
 
   const _SettingsTile({
-    required this.icon,
+    this.icon,
+    this.trailingIcon = Icons.chevron_right,
     required this.label,
     required this.onTap,
     this.isDestructive = false,
@@ -323,15 +333,12 @@ class _SettingsTile extends StatelessWidget {
     return Card(
       margin: EdgeInsets.only(bottom: 8.h),
       child: ListTile(
-        leading: Icon(icon, color: color),
+        leading: icon != null ? Icon(icon, color: color) : null,
         title: Text(
           label,
           style: context.textTheme.bodyLarge?.copyWith(color: color),
         ),
-        trailing: Icon(
-          Icons.chevron_right,
-          color: context.colors.outline,
-        ),
+        trailing: Icon(trailingIcon, color: context.colors.outline),
         onTap: onTap,
       ),
     );
