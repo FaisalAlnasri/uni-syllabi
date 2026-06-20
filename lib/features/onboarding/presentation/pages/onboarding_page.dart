@@ -83,7 +83,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
   Future<void> _finish() async {
     _analytics.logEvent(AnalyticsEvents.onboardingCompleted);
     await sl<OnboardingStorage>().setComplete();
-    if (mounted) context.go(AppRoutes.home);
+    // End on the optional auth page; the user can sign in or continue as guest.
+    if (mounted) context.go('${AppRoutes.login}?from=onboarding');
   }
 
   void _next() {

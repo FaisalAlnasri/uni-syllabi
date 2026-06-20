@@ -3,8 +3,13 @@ import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../../core/analytics/analytics_events.dart';
+import '../../../../core/analytics/analytics_service.dart';
 import '../../../../core/config/app_config.dart';
+import '../../../../core/di/service_locator.dart';
+import '../../../../core/router/app_routes.dart';
 import '../../../../core/utils/extensions/context_extensions.dart';
 import '../cubit/auth_cubit.dart';
 import '../../domain/entities/auth_state.dart';
@@ -13,7 +18,11 @@ import '../widgets/apple_sign_in_button.dart';
 import '../widgets/google_sign_in_button.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  /// Whether this page is shown as the final, optional step of onboarding.
+  /// Drives the `onboarding_auth_*` analytics and the "continue as guest" CTA.
+  final bool fromOnboarding;
+
+  const LoginPage({super.key, this.fromOnboarding = false});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -22,7 +31,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   bool _isLoading = false;
   String? _error;
-  late AuthCubit _authCubit; 
+  late AuthCubit _authCubit;
+  final AnalyticsService _analytics = sl<AnalyticsService>();
 
   @override
   void initState() {
@@ -36,6 +46,10 @@ class _LoginPageState extends State<LoginPage> {
         _isLoading = false;
       });
     };
+
+    if (widget.fromOnboarding) {
+      _analytics.logEvent(AnalyticsEvents.onboardingAuthSeen);
+    }
   }
 
   @override
@@ -45,6 +59,9 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _signIn(Future<void> Function() action) async {
+    if (widget.fromOnboarding) {
+      _analytics.logEvent(AnalyticsEvents.onboardingAuthSignIn);
+    }
     setState(() {
       _isLoading = true;
       _error = null;
@@ -55,6 +72,13 @@ class _LoginPageState extends State<LoginPage> {
     if (mounted && _error == null && _isLoading) {
       setState(() => _isLoading = false);
     }
+  }
+
+  void _continueAsGuest() {
+    if (widget.fromOnboarding) {
+      _analytics.logEvent(AnalyticsEvents.onboardingAuthSkip);
+    }
+    context.go(AppRoutes.home);
   }
 
   @override
@@ -114,6 +138,11 @@ class _LoginPageState extends State<LoginPage> {
                       textAlign: TextAlign.center,
                     ),
                   ],
+                  SizedBox(height: 8.h),
+                  TextButton(
+                    onPressed: _isLoading ? null : _continueAsGuest,
+                    child: const Text(AuthStrings.continueAsGuest),
+                  ),
                   SizedBox(height: 40.h),
                 ],
               ),

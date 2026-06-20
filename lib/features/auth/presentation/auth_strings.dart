@@ -3,4 +3,5 @@ abstract final class AuthStrings {
   static const String continueWithGoogle = 'المتابعة عبر Google';
   static const String continueWithApple = 'المتابعة عبر Apple';
   static const String signInError = 'حدث خطأ أثناء تسجيل الدخول';
+  static const String continueAsGuest = 'المتابعة بدون تسجيل';
 }

@@ -37,7 +37,9 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       path: AppRoutes.login,
-      builder: (context, state) => const LoginPage(),
+      builder: (context, state) => LoginPage(
+        fromOnboarding: state.uri.queryParameters['from'] == 'onboarding',
+      ),
     ),
     GoRoute(
       path: AppRoutes.onboarding,
