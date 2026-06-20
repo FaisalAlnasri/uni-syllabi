@@ -60,6 +60,12 @@ class _OnboardingPageState extends State<OnboardingPage> {
   bool get _isNotificationStep => _index == _pages.length - 1;
 
   @override
+  void initState() {
+    super.initState();
+    _analytics.logEvent(AnalyticsEvents.onboardingStarted);
+  }
+
+  @override
   void dispose() {
     _controller.dispose();
     super.dispose();
@@ -75,6 +81,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
   }
 
   Future<void> _finish() async {
+    _analytics.logEvent(AnalyticsEvents.onboardingCompleted);
     await sl<OnboardingStorage>().setComplete();
     if (mounted) context.go(AppRoutes.home);
   }
