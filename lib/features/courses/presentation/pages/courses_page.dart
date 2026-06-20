@@ -92,30 +92,13 @@ class _CourseCard extends StatelessWidget {
                     ),
                     SizedBox(width: 14.w),
                     Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            course.title,
-                            style: TextStyle(
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w700,
-                              color: c.textPrimary,
-                            ),
-                          ),
-                          SizedBox(height: 3.h),
-                          Text(
-                            next != null
-                                ? CoursesStrings.nextLabel(next.title)
-                                : CoursesStrings.itemCount(count),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: 12.5.sp,
-                              color: c.textSecondary,
-                            ),
-                          ),
-                        ],
+                      child: Text(
+                        course.title,
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w700,
+                          color: c.textPrimary,
+                        ),
                       ),
                     ),
                     Container(

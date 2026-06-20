@@ -73,7 +73,102 @@ class CourseDetailPage extends StatelessWidget {
                 color: color,
               ),
             ),
+          SizedBox(height: 12.h),
+          _DeleteCourseButton(course: live),
         ],
+      ),
+    );
+  }
+}
+
+/// Confirms a destructive action through a standard dialog. Returns `true` when
+/// the user taps the confirm button.
+Future<bool> _confirmDelete(
+  BuildContext context, {
+  required String title,
+  required String body,
+}) async {
+  final c = context.c;
+  final result = await showDialog<bool>(
+    context: context,
+    builder: (ctx) => AlertDialog(
+      backgroundColor: c.surface,
+      title: Text(title, style: TextStyle(color: c.textPrimary)),
+      content: Text(body, style: TextStyle(color: c.textSecondary)),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(ctx).pop(false),
+          child: Text(
+            CoursesStrings.cancel,
+            style: TextStyle(color: c.textSecondary),
+          ),
+        ),
+        TextButton(
+          onPressed: () => Navigator.of(ctx).pop(true),
+          child: Text(
+            CoursesStrings.remove,
+            style: TextStyle(
+              color: Theme.of(ctx).colorScheme.error,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+  return result ?? false;
+}
+
+class _DeleteCourseButton extends StatelessWidget {
+  final Course course;
+  const _DeleteCourseButton({required this.course});
+
+  @override
+  Widget build(BuildContext context) {
+    final error = Theme.of(context).colorScheme.error;
+
+    return SizedBox(
+      width: double.infinity,
+      child: Material(
+        color: error.withValues(alpha: 0.10),
+        borderRadius: BorderRadius.circular(14.r),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(14.r),
+          onTap: () async {
+            final cubit = context.read<CourseCubit>();
+            final messenger = ScaffoldMessenger.of(context);
+            final router = Navigator.of(context);
+            final confirmed = await _confirmDelete(
+              context,
+              title: CoursesStrings.removeCourseTitle,
+              body: CoursesStrings.removeCourseBody(course.title),
+            );
+            if (!confirmed) return;
+            await cubit.deleteCourse(course.id);
+            router.pop();
+            messenger.showSnackBar(
+              const SnackBar(content: Text(CoursesStrings.courseDeleted)),
+            );
+          },
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 15.h),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.delete_outline_rounded, size: 18.sp, color: error),
+                SizedBox(width: 8.w),
+                Text(
+                  CoursesStrings.deleteCourse,
+                  style: TextStyle(
+                    color: error,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 15.sp,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -245,6 +340,34 @@ class _DeliverableTile extends StatelessWidget {
                     color: c.textSecondary,
                   ),
                 ),
+              SizedBox(width: 4.w),
+              IconButton(
+                onPressed: () async {
+                  final cubit = context.read<CourseCubit>();
+                  final messenger = ScaffoldMessenger.of(context);
+                  final confirmed = await _confirmDelete(
+                    context,
+                    title: CoursesStrings.removeDeliverableTitle,
+                    body: CoursesStrings.removeDeliverableBody(
+                        deliverable.title),
+                  );
+                  if (!confirmed) return;
+                  await cubit.deleteDeliverable(course.id, deliverable.id);
+                  messenger.showSnackBar(
+                    const SnackBar(
+                      content: Text(CoursesStrings.deliverableDeleted),
+                    ),
+                  );
+                },
+                visualDensity: VisualDensity.compact,
+                padding: EdgeInsets.zero,
+                constraints: BoxConstraints(minWidth: 32.r, minHeight: 32.r),
+                icon: Icon(
+                  Icons.delete_outline_rounded,
+                  size: 18.sp,
+                  color: c.textMuted,
+                ),
+              ),
             ],
           ),
         ),

@@ -140,6 +140,27 @@ class CourseCubit extends Cubit<CourseState> {
         courses: state.courses.where((c) => c.id != courseId).toList()));
   }
 
+  /// Removes the deliverable identified by [deliverableId] from its course and
+  /// persists the updated course.
+  Future<void> deleteDeliverable(String courseId, String deliverableId) async {
+    final next = [
+      for (final course in state.courses)
+        course.id == courseId
+            ? Course(
+                id: course.id,
+                title: course.title,
+                color: course.color,
+                deliverables: [
+                  for (final d in course.deliverables)
+                    if (d.id != deliverableId) d,
+                ],
+              )
+            : course,
+    ];
+    emit(state.copyWith(courses: next));
+    await _repository.saveCourse(next.firstWhere((c) => c.id == courseId));
+  }
+
   // ── Button stubs ──────────────────────────────────────────────────────────
 
   void submitSyllabus() {

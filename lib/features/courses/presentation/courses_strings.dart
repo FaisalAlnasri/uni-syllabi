@@ -59,6 +59,13 @@ abstract final class CoursesStrings {
   static const String deliverablesSection = 'المتطلبات';
   static const String deliverables = 'المتطلبات';
   static const String gradedWeight = 'وزن الدرجات';
+  static const String deleteCourse = 'حذف المقرر';
+  static const String courseDeleted = 'تم حذف المقرر';
+  static const String removeDeliverableTitle = 'حذف المتطلب؟';
+  static const String deliverableDeleted = 'تم حذف المتطلب';
+
+  static String removeDeliverableBody(String title) =>
+      'سيؤدي هذا إلى حذف "$title" نهائيًا.';
 
   // ── Course confirmation ─────────────────────────────────────
   static const String reviewCourses = 'مراجعة المقررات';
