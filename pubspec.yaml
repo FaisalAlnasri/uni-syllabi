@@ -65,6 +65,8 @@ dependencies:
   intl: ^0.20.2            # locale-aware date formatting
   permission_handler: ^12.0.3
   url_launcher: ^6.3.1     # open privacy policy / terms links
+  share_plus: ^12.0.0
+  path_provider: ^2.1.6
 
 
 dev_dependencies:
