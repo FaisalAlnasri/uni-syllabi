@@ -166,6 +166,10 @@ class _DetailSheetState extends State<_DetailSheet> {
                           decoration: InputDecoration(
                             isDense: true,
                             contentPadding: EdgeInsets.zero,
+                            // Inline borderless edit — drop the global
+                            // inputDecorationTheme gray fill.
+                            filled: false,
+                            fillColor: Colors.transparent,
                             border: InputBorder.none,
                             hintText: CoursesStrings.title,
                             hintStyle: TextStyle(color: c.textMuted),
@@ -238,6 +242,10 @@ class _DetailSheetState extends State<_DetailSheet> {
                     decoration: InputDecoration(
                       isDense: true,
                       contentPadding: EdgeInsets.zero,
+                      // Inline borderless edit — drop the global
+                      // inputDecorationTheme gray fill.
+                      filled: false,
+                      fillColor: Colors.transparent,
                       border: InputBorder.none,
                       hintText: '—',
                       hintStyle: TextStyle(color: c.textMuted),
