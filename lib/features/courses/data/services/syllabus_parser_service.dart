@@ -2,8 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
+import 'package:unicalendar/core/logging/app_logger.dart';
 import 'package:unicalendar/features/courses/data/models/course_model.dart';
 import 'package:unicalendar/features/courses/domain/entities/course.dart';
 
@@ -21,8 +23,37 @@ class SyllabusParserServiceImpl implements SyllabusParserService {
 
   @override
   Future<List<Course>> parseSyllabus(File file) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw const UnauthenticatedException(
+          'يُرجى تسجيل الدخول لاستخدام هذه الميزة.');
+    }
+
+    var token = await user.getIdToken();
+    var streamed = await _send(file, token!);
+
+    // Token may have expired between issuance and now — refresh once and retry.
+    if (streamed.statusCode == 401) {
+      token = await user.getIdToken(true);
+      streamed = await _send(file, token!);
+    }
+
+    final body = await streamed.stream.bytesToString();
+
+    if (streamed.statusCode != 200) {
+      _throwForStatus(streamed.statusCode, body);
+    }
+
+    final json = jsonDecode(body) as Map<String, dynamic>;
+    return (json['courses'] as List<dynamic>)
+        .map((c) => CourseModel.fromJson(c as Map<String, dynamic>).toEntity())
+        .toList();
+  }
+
+  Future<http.StreamedResponse> _send(File file, String token) async {
     final uri = Uri.parse('$_baseUrl/api/schedule');
-    final request = http.MultipartRequest('POST', uri);
+    final request = http.MultipartRequest('POST', uri)
+      ..headers['Authorization'] = 'Bearer $token';
 
     // Detect MIME type from extension since mobile often sends octet-stream
     final ext = file.path.split('.').last.toLowerCase();
@@ -44,9 +75,8 @@ class SyllabusParserServiceImpl implements SyllabusParserService {
       ),
     );
 
-    final http.StreamedResponse streamed;
     try {
-      streamed = await request.send().timeout(const Duration(seconds: 30));
+      return await request.send().timeout(const Duration(seconds: 30));
     } on TimeoutException {
       throw const SyllabusParserException(
           'انتهت مهلة الطلب. يُرجى التحقق من اتصالك والمحاولة مرة أخرى.');
@@ -54,19 +84,34 @@ class SyllabusParserServiceImpl implements SyllabusParserService {
       throw const SyllabusParserException(
           'لا يوجد اتصال بالشبكة. يُرجى المحاولة مرة أخرى.');
     }
-    final body = await streamed.stream.bytesToString();
+  }
 
-    if (streamed.statusCode != 200) {
-      final decoded = jsonDecode(body);
-      final error =
-          (decoded is Map ? decoded['error'] : null) ?? 'خطأ غير معروف';
-      throw SyllabusParserException(error as String);
+  Never _throwForStatus(int statusCode, String body) {
+    Map<String, dynamic>? decoded;
+    try {
+      decoded = jsonDecode(body) as Map<String, dynamic>;
+    } catch (_) {
+      decoded = null;
     }
+    final serverMessage = decoded?['error'] as String?;
 
-    final json = jsonDecode(body) as Map<String, dynamic>;
-    return (json['courses'] as List<dynamic>)
-        .map((c) => CourseModel.fromJson(c as Map<String, dynamic>).toEntity())
-        .toList();
+    switch (statusCode) {
+      case 401:
+        throw const SessionExpiredException(
+            'انتهت صلاحية الجلسة. يُرجى تسجيل الدخول مرة أخرى.');
+      case 403:
+        throw const PremiumRequiredException(
+            'هذه الميزة متاحة فقط لمشتركي نور.');
+      case 429:
+        final limit = decoded?['limit'];
+        throw MonthlyLimitReachedException(
+          limit != null
+              ? 'لقد استخدمت الحد الأقصى لهذا الشهر ($limit طلبًا). حاول مرة أخرى الشهر القادم.'
+              : 'لقد استخدمت الحد الأقصى لهذا الشهر. حاول مرة أخرى الشهر القادم.',
+        );
+      default:
+        throw SyllabusParserException(serverMessage ?? 'خطأ غير معروف');
+    }
   }
 }
 
@@ -76,4 +121,25 @@ class SyllabusParserException implements Exception {
 
   @override
   String toString() => 'SyllabusParserException: $message';
+}
+
+/// No Firebase user is signed in. Show a sign-in prompt before retrying.
+class UnauthenticatedException extends SyllabusParserException {
+  const UnauthenticatedException(super.message);
+}
+
+/// The ID token was rejected even after a forced refresh — user likely needs
+/// to sign in again (token revoked, account deleted, etc.).
+class SessionExpiredException extends SyllabusParserException {
+  const SessionExpiredException(super.message);
+}
+
+/// The signed-in user doesn't have the Noor entitlement. Show the paywall.
+class PremiumRequiredException extends SyllabusParserException {
+  const PremiumRequiredException(super.message);
+}
+
+/// The user has hit their monthly request cap.
+class MonthlyLimitReachedException extends SyllabusParserException {
+  const MonthlyLimitReachedException(super.message);
 }
