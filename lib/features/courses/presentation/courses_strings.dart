@@ -131,6 +131,7 @@ abstract final class CoursesStrings {
 
   // ── New deliverable form ────────────────────────────────────
   static const String newDeliverable = 'متطلب جديد';
+  static const String editDeliverable = 'تعديل المتطلب';
   static const String courseField = 'المقرر';
   static const String chooseCourse = 'اختر المقرر';
   static const String deliverableTitleHint = 'مثال: الاختبار النصفي';

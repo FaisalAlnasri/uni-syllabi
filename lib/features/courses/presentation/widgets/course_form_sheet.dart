@@ -73,6 +73,22 @@ Future<void> showEditCourseSheet(BuildContext context, Course course) async {
   );
 }
 
+/// Edits an existing [course]'s details (title/color/icon) and returns the
+/// updated copy, or null when cancelled. Deliverables are carried over
+/// unchanged and nothing is persisted — review flows that hold not-yet-saved
+/// courses in local state manage persistence themselves.
+Future<Course?> showEditCourseDetailsSheet(
+  BuildContext context,
+  Course course,
+) {
+  return showModalBottomSheet<Course>(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+    builder: (_) => _CourseFormSheet(initial: course),
+  );
+}
+
 class _CourseFormSheet extends StatefulWidget {
   /// When non-null the form edits this course (title/color/icon) instead of
   /// creating a new one.

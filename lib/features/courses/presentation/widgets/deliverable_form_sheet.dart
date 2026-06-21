@@ -61,13 +61,38 @@ Future<Deliverable?> showNewDeliverableSheet(BuildContext context) async {
   return result?.deliverable;
 }
 
+/// Edits an existing [deliverable] (no course picker) and returns the updated
+/// copy, or null when cancelled. Persistence is left to the caller, so review
+/// flows can edit not-yet-saved deliverables in local state.
+Future<Deliverable?> showEditDeliverableSheet(
+  BuildContext context,
+  Deliverable deliverable,
+) async {
+  final result = await showModalBottomSheet<_FormResult>(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+    builder: (_) =>
+        _DeliverableFormSheet(courses: const [], initial: deliverable),
+  );
+  return result?.deliverable;
+}
+
 class _DeliverableFormSheet extends StatefulWidget {
   /// Available courses for the picker. Empty list hides the picker (the form
   /// then just returns a deliverable).
   final List<Course> courses;
   final Course? lockedCourse;
 
-  const _DeliverableFormSheet({required this.courses, this.lockedCourse});
+  /// When non-null the form edits this deliverable (fields are pre-filled and
+  /// its id is preserved) instead of creating a new one.
+  final Deliverable? initial;
+
+  const _DeliverableFormSheet({
+    required this.courses,
+    this.lockedCourse,
+    this.initial,
+  });
 
   @override
   State<_DeliverableFormSheet> createState() => _DeliverableFormSheetState();
@@ -82,12 +107,22 @@ class _DeliverableFormSheetState extends State<_DeliverableFormSheet> {
   String? _error;
 
   bool get _showPicker => widget.courses.isNotEmpty;
+  bool get _isEditing => widget.initial != null;
 
   @override
   void initState() {
     super.initState();
     _selectedCourseId =
         widget.lockedCourse?.id ?? widget.courses.firstOrNull?.id;
+    final initial = widget.initial;
+    if (initial != null) {
+      _titleController.text = initial.title;
+      _type = initial.type;
+      _date = initial.date;
+      if (initial.weight != null) {
+        _weightController.text = (initial.weight! * 100).toStringAsFixed(0);
+      }
+    }
   }
 
   @override
@@ -122,13 +157,16 @@ class _DeliverableFormSheetState extends State<_DeliverableFormSheet> {
     final raw = double.tryParse(_weightController.text.trim());
     final weight = raw != null ? (raw / 100).clamp(0.0, 1.0) : null;
 
+    final initial = widget.initial;
     final deliverable = Deliverable(
-      id: generateId(),
+      id: initial?.id ?? generateId(),
       title: title,
       type: _type,
       date: _date,
+      rawDateText: initial?.rawDateText,
       weight: weight,
       isClear: true,
+      confidenceNotes: initial?.confidenceNotes,
     );
 
     Navigator.of(context).pop<_FormResult>(
@@ -171,7 +209,9 @@ class _DeliverableFormSheetState extends State<_DeliverableFormSheet> {
               ),
               SizedBox(height: 18.h),
               Text(
-                CoursesStrings.newDeliverable,
+                _isEditing
+                    ? CoursesStrings.editDeliverable
+                    : CoursesStrings.newDeliverable,
                 style: TextStyle(
                   fontSize: 17.sp,
                   fontWeight: FontWeight.w800,
@@ -338,7 +378,9 @@ class _DeliverableFormSheetState extends State<_DeliverableFormSheet> {
                 width: double.infinity,
                 child: _PrimaryButton(
                   icon: Icons.check_rounded,
-                  label: CoursesStrings.addAction,
+                  label: _isEditing
+                      ? CoursesStrings.saveChanges
+                      : CoursesStrings.addAction,
                   onTap: _submit,
                 ),
               ),
