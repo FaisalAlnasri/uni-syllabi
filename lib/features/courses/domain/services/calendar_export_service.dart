@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
+import '../../../../core/logging/app_logger.dart';
 import '../entities/course.dart';
 import '../entities/deliverable.dart';
 
@@ -15,22 +16,45 @@ class CalendarExportService {
     final dated = course.deliverables.where((d) => d.date != null).toList();
     final skipped = course.deliverables.length - dated.length;
 
-    final ics = _buildCalendar([(course, dated)]);
-    await _writeAndShare(ics, course.title);
-    return skipped;
+    try {
+      final ics = _buildCalendar([(course, dated)]);
+      await _writeAndShare(ics, course.title);
+      return skipped;
+    } catch (e, st) {
+      AppLogger.error(
+        'Calendar export failed for course "${course.title}" '
+        '(id: ${course.id}): ${dated.length} event(s), $skipped skipped',
+        e,
+        st,
+      );
+      rethrow;
+    }
   }
 
   /// Export the whole semester (many courses) into a single .ics.
   Future<int> exportCourses(List<Course> courses) async {
     var skipped = 0;
+    var events = 0;
     final groups = <(Course, List<Deliverable>)>[];
     for (final c in courses) {
       final dated = c.deliverables.where((d) => d.date != null).toList();
       skipped += c.deliverables.length - dated.length;
+      events += dated.length;
       groups.add((c, dated));
     }
-    await _writeAndShare(_buildCalendar(groups), 'الفصل الدراسي');
-    return skipped;
+
+    try {
+      await _writeAndShare(_buildCalendar(groups), 'الفصل الدراسي');
+      return skipped;
+    } catch (e, st) {
+      AppLogger.error(
+        'Calendar export failed for ${courses.length} course(s): '
+        '$events event(s), $skipped skipped',
+        e,
+        st,
+      );
+      rethrow;
+    }
   }
 
   // --- ICS construction -----------------------------------------------------
