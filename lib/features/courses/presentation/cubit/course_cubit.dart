@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/config/app_config.dart';
 import '../../domain/entities/course.dart';
 import '../../domain/entities/deliverable.dart';
 import '../../domain/repositories/course_repository.dart';
@@ -46,12 +47,13 @@ class CourseCubit extends Cubit<CourseState> {
 
   // ── Initialisation ────────────────────────────────────────────────────────
 
-  /// Load courses from the cache. Falls back to seed data on first launch
-  /// and persists it so subsequent launches hit the cache.
+  /// Load courses from the cache. In dev mode only, falls back to seed data on
+  /// first launch and persists it so subsequent launches hit the cache.
+  /// Production starts with an empty list.
   Future<void> load() async {
     emit(state.copyWith(loading: true));
     final saved = await _repository.getCourses();
-    if (saved.isNotEmpty) {
+    if (saved.isNotEmpty || !AppConfig.instance.isDev) {
       emit(state.copyWith(courses: saved, loading: false));
     } else {
       final seeded = _seedData();
