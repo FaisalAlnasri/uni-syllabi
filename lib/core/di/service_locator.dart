@@ -13,6 +13,7 @@ import '../../features/courses/data/datasources/local/course_local_datasource.da
 import '../../features/courses/data/repositories/course_repository_impl.dart';
 import '../../features/courses/data/services/syllabus_parser_service.dart';
 import '../../features/courses/domain/repositories/course_repository.dart';
+import '../../features/courses/domain/services/calendar_export_service.dart';
 import '../../features/courses/presentation/cubit/course_cubit.dart';
 import '../../features/paywall/domain/subscription.dart';
 import '../../features/paywall/data/purchases_repository_impl.dart';
@@ -84,9 +85,10 @@ void _registerCourses() {
   sl.registerLazySingleton<SyllabusParserService>(
     () => SyllabusParserServiceImpl(AppConfig.instance.syllabusApiBaseUrl),
   );
+  sl.registerLazySingleton<CalendarExportService>(() => CalendarExportService());
 
   // CourseCubit — lazy singleton shared across all tabs + pushed routes.
   sl.registerLazySingleton<CourseCubit>(
-    () => CourseCubit(sl<CourseRepository>()),
+    () => CourseCubit(sl<CourseRepository>(), sl<CalendarExportService>()),
   );
 }

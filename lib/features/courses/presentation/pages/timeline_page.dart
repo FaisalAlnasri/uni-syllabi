@@ -60,16 +60,26 @@ class TimelinePage extends StatelessWidget {
     );
   }
 
-  void _export(BuildContext context, CourseCubit cubit) {
+  Future<void> _export(BuildContext context, CourseCubit cubit) async {
     // Calendar export is premium-gated.
     if (!sl<PurchasesRepository>().isSubscriber) {
       context.push(AppRoutes.paywall);
       return;
     }
-    cubit.exportToCalendar();
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text(CoursesStrings.calendarExportComingSoon)),
-    );
+
+    final messenger = ScaffoldMessenger.of(context);
+    try {
+      final skipped = await cubit.exportToCalendar();
+      messenger.showSnackBar(SnackBar(
+        content: Text(skipped == null
+            ? CoursesStrings.calendarNothingToExport
+            : CoursesStrings.calendarExported(skipped)),
+      ));
+    } catch (_) {
+      messenger.showSnackBar(
+        const SnackBar(content: Text(CoursesStrings.calendarExportFailed)),
+      );
+    }
   }
 }
 
