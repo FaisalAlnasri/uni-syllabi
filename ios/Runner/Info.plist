@@ -10,6 +10,12 @@
 	<string>Aa Template</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>يُستخدم موقعك لتحسين المحتوى والخدمات المقدمة داخل التطبيق.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>يصل التطبيق إلى الكاميرا لالتقاط الصور وإرفاقها عند الحاجة.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>يصل التطبيق إلى مكتبة الصور لاختيار الصور وإرفاقها عند الحاجة.</string>
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
