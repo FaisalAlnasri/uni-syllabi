@@ -27,7 +27,7 @@ void main() async {
     revenueCatApiKey: Platform.isIOS
         ? 'appl_mzEWugcuEjeJpFemieDhreiZqLR'
         : 'goog_jNZjDkhjtCjtsKUaQerMslcqqsv',
-    revenueCatEntitlementId: 'premium',
+    revenueCatEntitlementId: 'uni syllabi Pro',
     requiresAuth: false,
     hasOnboarding: true,
     syllabusApiBaseUrl: 'https://uni-calendar-backend.vercel.app',

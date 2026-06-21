@@ -24,7 +24,7 @@ void main() async {
   AppConfig.setup(
     env: Env.dev,
     revenueCatApiKey: 'test_pgmRCggDrSghPQhlVvtFhoNYElW',
-    revenueCatEntitlementId: 'premium',
+    revenueCatEntitlementId: 'uni syllabi Pro',
     requiresAuth: false,
     hasOnboarding: true,
     syllabusApiBaseUrl: 'https://uni-calendar-backend.vercel.app',
