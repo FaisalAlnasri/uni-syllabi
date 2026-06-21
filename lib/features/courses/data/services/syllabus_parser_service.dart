@@ -25,15 +25,20 @@ class SyllabusParserServiceImpl implements SyllabusParserService {
   Future<List<Course>> parseSyllabus(File file) async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
+      AppLogger.warning('[SyllabusParser] parseSyllabus called with no user');
       throw const UnauthenticatedException(
           'يُرجى تسجيل الدخول لاستخدام هذه الميزة.');
     }
+
+    AppLogger.info('[SyllabusParser] parsing ${file.path}');
 
     var token = await user.getIdToken();
     var streamed = await _send(file, token!);
 
     // Token may have expired between issuance and now — refresh once and retry.
     if (streamed.statusCode == 401) {
+      AppLogger.warning(
+          '[SyllabusParser] got 401, refreshing token and retrying');
       token = await user.getIdToken(true);
       streamed = await _send(file, token!);
     }
@@ -41,13 +46,21 @@ class SyllabusParserServiceImpl implements SyllabusParserService {
     final body = await streamed.stream.bytesToString();
 
     if (streamed.statusCode != 200) {
+      AppLogger.error(
+          '[SyllabusParser] request failed (${streamed.statusCode}): $body');
       _throwForStatus(streamed.statusCode, body);
     }
 
-    final json = jsonDecode(body) as Map<String, dynamic>;
-    return (json['courses'] as List<dynamic>)
-        .map((c) => CourseModel.fromJson(c as Map<String, dynamic>).toEntity())
-        .toList();
+    try {
+      final json = jsonDecode(body) as Map<String, dynamic>;
+      return (json['courses'] as List<dynamic>)
+          .map((c) => CourseModel.fromJson(c as Map<String, dynamic>).toEntity())
+          .toList();
+    } catch (e, st) {
+      AppLogger.error('[SyllabusParser] failed to parse response body', e, st);
+      throw const SyllabusParserException(
+          'تعذّر قراءة استجابة الخادم. يُرجى المحاولة مرة أخرى.');
+    }
   }
 
   Future<http.StreamedResponse> _send(File file, String token) async {
@@ -77,10 +90,12 @@ class SyllabusParserServiceImpl implements SyllabusParserService {
 
     try {
       return await request.send().timeout(const Duration(seconds: 30));
-    } on TimeoutException {
+    } on TimeoutException catch (e, st) {
+      AppLogger.error('[SyllabusParser] request to $uri timed out', e, st);
       throw const SyllabusParserException(
           'انتهت مهلة الطلب. يُرجى التحقق من اتصالك والمحاولة مرة أخرى.');
-    } on SocketException {
+    } on SocketException catch (e, st) {
+      AppLogger.error('[SyllabusParser] network error sending to $uri', e, st);
       throw const SyllabusParserException(
           'لا يوجد اتصال بالشبكة. يُرجى المحاولة مرة أخرى.');
     }
