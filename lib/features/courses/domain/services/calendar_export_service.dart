@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:share_plus/share_plus.dart';
 import '../../../../core/logging/app_logger.dart';
 import '../entities/course.dart';
 import '../entities/deliverable.dart';
@@ -9,8 +9,8 @@ import '../entities/deliverable.dart';
 class CalendarExportService {
   static const _domain = 'uni-syllabi.faisalalnasri.com';
 
-  /// Exports one course's deliverables (that have a date) to an .ics file
-  /// and opens the share sheet. Returns the number of deliverables skipped
+  /// Exports one course's deliverables (that have a date) to an .ics file and
+  /// opens it in the calendar app. Returns the number of deliverables skipped
   /// because they had no date — surface this in the UI.
   Future<int> exportCourse(Course course) async {
     final dated = course.deliverables.where((d) => d.date != null).toList();
@@ -18,7 +18,7 @@ class CalendarExportService {
 
     try {
       final ics = _buildCalendar([(course, dated)]);
-      await _writeAndShare(ics, course.title);
+      await _writeAndOpen(ics, course.title);
       return skipped;
     } catch (e, st) {
       AppLogger.error(
@@ -44,7 +44,7 @@ class CalendarExportService {
     }
 
     try {
-      await _writeAndShare(_buildCalendar(groups), 'الفصل الدراسي');
+      await _writeAndOpen(_buildCalendar(groups), 'الفصل الدراسي');
       return skipped;
     } catch (e, st) {
       AppLogger.error(
@@ -166,17 +166,21 @@ class CalendarExportService {
 
   // --- Output ---------------------------------------------------------------
 
-  Future<void> _writeAndShare(String ics, String name) async {
+  /// Writes the .ics to a temp file and opens it with the OS handler
+  /// (ACTION_VIEW on Android). Unlike a share sheet, this surfaces calendar
+  /// apps \u2014 e.g. Google Calendar's "import events" screen.
+  Future<void> _writeAndOpen(String ics, String name) async {
     final dir = await getTemporaryDirectory();
     final safe = name.replaceAll(RegExp(r'[^\w\u0600-\u06FF]+'), '_');
     final file = File('${dir.path}/$safe.ics');
     await file.writeAsString(ics);
 
-    await SharePlus.instance.share(
-      ShareParams(
-        files: [XFile(file.path, mimeType: 'text/calendar')],
-        subject: name,
-      ),
-    );
+    final result =
+        await OpenFilex.open(file.path, type: 'text/calendar');
+    if (result.type != ResultType.done) {
+      throw Exception(
+        'Could not open calendar file (${result.type}): ${result.message}',
+      );
+    }
   }
 }
