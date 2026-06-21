@@ -59,7 +59,17 @@ class PaywallCubit extends Cubit<PaywallState> {
     emit(PaywallPurchasing(current.offering, current.selected));
     final result = await _repository.purchase(current.selected);
     result.when(
-      onSuccess: (_) => emit(const PaywallSuccess()),
+      onSuccess: (subscription) {
+        if (subscription.isActive) {
+          emit(const PaywallSuccess());
+        } else {
+          emit(PaywallActionError(
+            current.offering,
+            current.selected,
+            'تعذّر تفعيل الاشتراك',
+          ));
+        }
+      },
       onFailure: (error) => emit(
         PaywallActionError(current.offering, current.selected, error.message),
       ),
