@@ -14,6 +14,10 @@ abstract interface class AuthService {
   Future<Result<AppUser, AppError>> signInWithGoogle();
   Future<Result<AppUser, AppError>> signInWithApple();
   Future<Result<void, AppError>> signOut();
+
+  /// Permanently deletes the signed-in account and clears the local session.
+  Future<Result<void, AppError>> deleteAccount();
+
   AppUser? get currentUser;
 }
 
@@ -124,6 +128,41 @@ class FirebaseAuthService implements AuthService {
     } catch (e, st) {
       AppLogger.warning('Sign-out failed', e, st);
       return Failure(AuthError(message: 'فشل تسجيل الخروج', originalException: e));
+    }
+  }
+
+  // ── Delete account ───────────────────────────────────────────────────────────
+
+  @override
+  Future<Result<void, AppError>> deleteAccount() async {
+    try {
+      final user = _firebaseAuth.currentUser;
+      if (user == null) {
+        return const Failure(AuthError(message: 'لا يوجد حساب لحذفه'));
+      }
+
+      // TODO: When we add Firestore (or other backend) user data, delete it
+      // here BEFORE removing the auth account — once the account is gone we lose
+      // the uid needed to locate and clean up that data.
+
+      await user.delete();
+
+      // Deleting the Firebase user already signs out of Firebase; also clear the
+      // cached Google session so a fresh sign-in is required next time.
+      await _googleSignIn.signOut();
+      return const Success(null);
+    } on fb.FirebaseAuthException catch (e, st) {
+      if (e.code == 'requires-recent-login') {
+        AppLogger.warning('Delete account requires recent login', e, st);
+        return const Failure(AuthError(
+          message: 'يرجى تسجيل الدخول مرة أخرى ثم إعادة المحاولة لحذف الحساب',
+        ));
+      }
+      AppLogger.warning('Delete account failed', e, st);
+      return Failure(AuthError(message: 'تعذّر حذف الحساب', originalException: e));
+    } catch (e, st) {
+      AppLogger.warning('Delete account failed', e, st);
+      return Failure(AuthError(message: 'تعذّر حذف الحساب', originalException: e));
     }
   }
 

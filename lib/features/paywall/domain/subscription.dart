@@ -55,4 +55,8 @@ abstract interface class PurchasesRepository {
   Future<Result<PaywallOffering, AppError>> fetchOffering();
   Future<Result<Subscription, AppError>> purchase(Package package);
   Future<Result<Subscription, AppError>> restorePurchases();
+
+  /// Opens the OS-level subscription manager (App Store / Play Store) so the
+  /// user can change or cancel their subscription.
+  Future<Result<void, AppError>> manageSubscriptions();
 }

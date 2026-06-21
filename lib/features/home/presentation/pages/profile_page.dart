@@ -5,11 +5,13 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/config/app_config.dart';
 import '../../../../core/di/service_locator.dart';
+import '../../../../core/error/result.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/storage/onboarding_storage.dart';
 import '../../../../core/theme/theme_cubit.dart';
 import '../../../../core/utils/extensions/context_extensions.dart';
 import '../../../auth/presentation/cubit/auth_cubit.dart';
+import '../../../paywall/domain/subscription.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -53,13 +55,25 @@ class ProfilePage extends StatelessWidget {
 
           SizedBox(height: 32.h),
 
-          // ── Premium upsell ────────────────────────────────────
+          // ── Membership ────────────────────────────────────────
           _SectionLabel('العضوية'),
-          _SettingsTile(
-            icon: Icons.workspace_premium_outlined,
-            label: 'ترقية إلى المميّز',
-            onTap: () => context.push(AppRoutes.paywall),
-          ),
+          if (sl<PurchasesRepository>().isSubscriber) ...[
+            _InfoTile(
+              icon: Icons.workspace_premium_rounded,
+              label: 'العضوية المميّزة',
+              value: 'مفعّلة',
+            ),
+            _SettingsTile(
+              icon: Icons.manage_accounts_outlined,
+              label: 'إدارة الاشتراكات',
+              onTap: () => _manageSubscriptions(context),
+            ),
+          ] else
+            _SettingsTile(
+              icon: Icons.workspace_premium_outlined,
+              label: 'ترقية إلى المميّز',
+              onTap: () => context.push(AppRoutes.paywall),
+            ),
 
           SizedBox(height: 24.h),
 
@@ -92,14 +106,20 @@ class ProfilePage extends StatelessWidget {
 
           // ── Account ───────────────────────────────────────────
           _SectionLabel('الحساب'),
-          if (isAuthenticated)
+          if (isAuthenticated) ...[
             _SettingsTile(
               trailingIcon: Icons.logout,
               label: 'تسجيل الخروج',
               isDestructive: true,
               onTap: () => _confirmSignOut(context, cubit),
-            )
-          else
+            ),
+            _SettingsTile(
+              trailingIcon: Icons.delete_outline,
+              label: 'حذف الحساب',
+              isDestructive: true,
+              onTap: () => _confirmDeleteAccount(context, cubit),
+            ),
+          ] else
             _SettingsTile(
               trailingIcon: Icons.login,
               label: 'تسجيل الدخول',
@@ -107,6 +127,64 @@ class ProfilePage extends StatelessWidget {
             ),
         ],
       ),
+    );
+  }
+
+  Future<void> _confirmDeleteAccount(BuildContext context, AuthCubit cubit) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('حذف الحساب'),
+        content: const Text(
+          'سيتم حذف حسابك نهائيًا ولا يمكن التراجع عن هذا الإجراء. هل أنت متأكد؟',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: const Text('إلغاء'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: Text(
+              'حذف',
+              style: TextStyle(color: Theme.of(ctx).colorScheme.error),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true) return;
+
+    final result = await cubit.deleteAccount();
+    if (!context.mounted) return;
+
+    if (result.isFailure) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(result.errorOrNull!.message)),
+      );
+      return;
+    }
+
+    // Account deleted (and signed out) — route away like sign-out does.
+    if (AppConfig.instance.isDev) {
+      await sl<OnboardingStorage>().reset();
+      if (context.mounted) context.go(AppRoutes.onboarding);
+    } else {
+      context.go(AppRoutes.login);
+    }
+  }
+
+  Future<void> _manageSubscriptions(BuildContext context) async {
+    final result = await sl<PurchasesRepository>().manageSubscriptions();
+    if (!context.mounted) return;
+    result.when(
+      onSuccess: (_) {},
+      onFailure: (error) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(error.message)),
+        );
+      },
     );
   }
 
