@@ -38,6 +38,6 @@ abstract final class PaywallStrings {
   // TODO: Replace these template URLs with your real links before release.
   static const String privacyPolicyLabel = 'سياسة الخصوصية';
   static const String termsOfUseLabel = 'شروط الاستخدام';
-  static const String privacyPolicyUrl = 'https://example.com/privacy';
-  static const String termsOfUseUrl = 'https://example.com/terms';
+  static const String privacyPolicyUrl = 'https://doc-hosting.flycricket.io/uni-schedule-privacy-policy/c1927cea-beb0-4d47-abc4-cfa8b1d2fb12/privacy';
+  static const String termsOfUseUrl = 'https://doc-hosting.flycricket.io/uni-schedule-terms-of-use/1e3df62b-0503-4f35-86df-38dfe27cd7fa/terms';
 }
