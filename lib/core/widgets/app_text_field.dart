@@ -111,6 +111,11 @@ class _AppTextFieldState extends State<AppTextField> {
         onSubmitted: widget.onSubmitted,
         decoration: InputDecoration(
           isCollapsed: true,
+          // The outer AnimatedContainer is the field's surface; turn off the
+          // global inputDecorationTheme fill so it doesn't paint a second gray
+          // box inside (which also stole the tap target).
+          filled: false,
+          fillColor: Colors.transparent,
           border: InputBorder.none,
           enabledBorder: InputBorder.none,
           focusedBorder: InputBorder.none,
