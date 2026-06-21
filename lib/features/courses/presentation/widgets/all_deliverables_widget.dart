@@ -6,6 +6,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../domain/entities/course.dart';
 import '../../domain/entities/deliverable.dart';
 import '../courses_strings.dart';
+import 'course_glyph.dart';
 import 'deliverable_detail_sheet.dart';
 import 'type_glyph.dart';
 
@@ -419,7 +420,7 @@ class _DeliverableCard extends StatelessWidget {
                           color: color.withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(8.r),
                         ),
-                        child: Icon(typeIcon(deliverable.type),
+                        child: Icon(courseIcon(course.iconKey),
                             size: 16.sp, color: color),
                       ),
                       SizedBox(width: 10.w),

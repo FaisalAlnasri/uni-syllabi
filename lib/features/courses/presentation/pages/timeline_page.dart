@@ -13,6 +13,7 @@ import '../../domain/entities/deliverable.dart';
 import '../courses_strings.dart';
 import '../cubit/course_cubit.dart';
 import '../widgets/all_deliverables_widget.dart';
+import '../widgets/course_glyph.dart';
 import '../widgets/deliverable_detail_sheet.dart';
 import '../widgets/type_glyph.dart';
 
@@ -258,13 +259,27 @@ class _UpcomingCard extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 6.h),
-              Text(
-                course.title,
-                style: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.78),
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w500,
-                ),
+              Row(
+                children: [
+                  Icon(
+                    courseIcon(course.iconKey),
+                    size: 14.sp,
+                    color: Colors.white.withValues(alpha: 0.78),
+                  ),
+                  SizedBox(width: 6.w),
+                  Flexible(
+                    child: Text(
+                      course.title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.78),
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ],
               ),
               SizedBox(height: 16.h),
               Row(
