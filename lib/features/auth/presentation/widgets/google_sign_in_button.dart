@@ -30,14 +30,11 @@ class GoogleSignInButton extends StatelessWidget {
           : Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Simple 'G' mark — no external icon asset required.
-                Text(
-                  'G',
-                  style: context.textTheme.labelLarge?.copyWith(
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.w700,
-                    color: const Color(0xFF4285F4),
-                  ),
+                Image.asset(
+                  'assets/icons/google_logo.png',
+                  width: 20.r,
+                  height: 20.r,
+                  fit: BoxFit.contain,
                 ),
                 SizedBox(width: 12.w),
                 Text(AuthStrings.continueWithGoogle),

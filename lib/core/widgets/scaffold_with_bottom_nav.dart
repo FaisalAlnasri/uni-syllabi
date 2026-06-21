@@ -11,6 +11,7 @@ import '../../features/courses/presentation/widgets/add_action_sheet.dart';
 import '../../features/courses/presentation/widgets/course_form_sheet.dart';
 import '../../features/courses/presentation/widgets/deliverable_form_sheet.dart';
 import '../../features/courses/presentation/widgets/syllabus_upload_dialog.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 /// Hosts the 4 bottom-nav tabs (Timeline, Calendar, Courses, Profile) and the
 /// center-docked syllabus-upload FAB. Replaces the source app's `AppShell`.
@@ -19,12 +20,28 @@ class ScaffoldWithBottomNav extends StatelessWidget {
 
   const ScaffoldWithBottomNav({super.key, required this.child});
 
-  void _openUpload(BuildContext context) {
+  Future<void> _openUpload(BuildContext context) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      final signedIn = await context.push<bool>(AppRoutes.login);
+      if (signedIn == null || signedIn == false) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                "يجب تسجيل الدخول لتحليل المنهج الدراسي. يرجى المحاولة مرة أخرى.",
+              ),
+            ),
+          );
+        }
+        return;
+      }
+    }
+    if (!context.mounted) return;
     showDialog<void>(
       context: context,
-      builder: (_) => SyllabusUploadDialog(
-        service: sl<SyllabusParserService>(),
-      ),
+      builder: (_) =>
+          SyllabusUploadDialog(service: sl<SyllabusParserService>()),
     );
   }
 
@@ -40,7 +57,7 @@ class ScaffoldWithBottomNav extends StatelessWidget {
           context.push(AppRoutes.paywall);
           return;
         }
-        _openUpload(context);
+        await _openUpload(context);
       case AddAction.deliverable:
         await showAddDeliverableSheet(context);
       case AddAction.course:

@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart' show PlatformException;
 import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/config/app_config.dart';
 import '../../../core/error/app_error.dart';
@@ -86,6 +87,32 @@ class RevenueCatRepository implements PurchasesRepository {
     } catch (e, st) {
       AppLogger.warning('restorePurchases failed', e, st);
       return Failure(UnknownError(message: 'تعذّر استعادة المشتريات', originalException: e));
+    }
+  }
+
+  // ── Manage subscriptions ─────────────────────────────────────────────────────
+
+  @override
+  Future<Result<void, AppError>> manageSubscriptions() async {
+    try {
+      final info = await Purchases.getCustomerInfo();
+      final url = info.managementURL;
+      if (url == null) {
+        return const Failure(UnknownError(message: 'تعذّر فتح إدارة الاشتراكات'));
+      }
+      final launched = await launchUrl(
+        Uri.parse(url),
+        mode: LaunchMode.externalApplication,
+      );
+      if (!launched) {
+        return const Failure(UnknownError(message: 'تعذّر فتح إدارة الاشتراكات'));
+      }
+      return const Success(null);
+    } catch (e, st) {
+      AppLogger.warning('manageSubscriptions failed', e, st);
+      return Failure(
+        UnknownError(message: 'تعذّر فتح إدارة الاشتراكات', originalException: e),
+      );
     }
   }
 

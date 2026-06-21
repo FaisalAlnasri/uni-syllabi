@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/config/app_config.dart';
+import '../../../../core/error/app_error.dart';
 import '../../../../core/error/result.dart';
 import '../../domain/entities/app_user.dart';
 import '../../domain/services/auth_service.dart';
@@ -66,6 +67,19 @@ class AuthCubit extends Cubit<AuthState> {
       onSuccess: (_) {},
       onFailure: (error) => onAuthError?.call(error.message),
     );
+  }
+
+  /// Permanently deletes the account (which also signs the user out). Returns
+  /// the result so the caller can gate navigation on success and surface the
+  /// error inline.
+  Future<Result<void, AppError>> deleteAccount() async {
+    final result = await _authService.deleteAccount();
+    // authStateChanges drives the state transition to guest/unauthenticated.
+    result.when(
+      onSuccess: (_) {},
+      onFailure: (error) => onAuthError?.call(error.message),
+    );
+    return result;
   }
 
   @override

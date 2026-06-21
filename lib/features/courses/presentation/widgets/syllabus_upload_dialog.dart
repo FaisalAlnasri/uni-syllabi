@@ -34,19 +34,37 @@ class _SyllabusUploadDialogState extends State<SyllabusUploadDialog> {
 
     if (result == null || result.files.single.path == null) return;
 
+    final file = File(result.files.single.path!);
+    await _parse(file);
+  }
+
+  Future<void> _parse(File file) async {
     setState(() {
       _phase = _Phase.loading;
       _errorMessage = null;
     });
 
     try {
-      final file = File(result.files.single.path!);
       final List<Course> courses = await widget.service.parseSyllabus(file);
 
       if (!mounted) return;
       final router = GoRouter.of(context);
       Navigator.of(context).pop(); // close the dialog
       router.push(AppRoutes.courseConfirmation, extra: courses);
+    } on UnauthenticatedException catch (_) {
+      await _handleSignInThenRetry(file);
+    } on SessionExpiredException catch (_) {
+      await _handleSignInThenRetry(file);
+    } on PremiumRequiredException catch (_) {
+      if (!mounted) return;
+      final router = GoRouter.of(context);
+      Navigator.of(context).pop();
+      router.push(AppRoutes.paywall); // swap for your actual Noor paywall route
+    } on MonthlyLimitReachedException catch (e) {
+      setState(() {
+        _phase = _Phase.error;
+        _errorMessage = e.message;
+      });
     } on SyllabusParserException catch (e) {
       setState(() {
         _phase = _Phase.error;
@@ -56,6 +74,19 @@ class _SyllabusUploadDialogState extends State<SyllabusUploadDialog> {
       setState(() {
         _phase = _Phase.error;
         _errorMessage = CoursesStrings.genericError;
+      });
+    }
+  }
+
+  Future<void> _handleSignInThenRetry(File file) async {
+    final signedIn = await context.push<bool>(AppRoutes.login); // swap for your real sign-in entry point
+    if (!mounted) return;
+    if (signedIn == true) {
+      await _parse(file); // same file, no re-pick needed
+    } else {
+      setState(() {
+        _phase = _Phase.error;
+        _errorMessage = "يجب تسجيل الدخول لتحليل المنهج الدراسي. يرجى المحاولة مرة أخرى.";
       });
     }
   }
@@ -199,8 +230,11 @@ class _ChooseFileButton extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.folder_open_outlined,
-                    size: 18.sp, color: Colors.white),
+                Icon(
+                  Icons.folder_open_outlined,
+                  size: 18.sp,
+                  color: Colors.white,
+                ),
                 SizedBox(width: 8.w),
                 Text(
                   CoursesStrings.openFile,

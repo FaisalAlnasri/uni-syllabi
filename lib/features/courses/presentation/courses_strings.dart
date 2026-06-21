@@ -14,7 +14,13 @@ abstract final class CoursesStrings {
   static const String goodMorning = 'صباح الخير';
   static const String goodAfternoon = 'طاب يومك';
   static const String goodEvening = 'مساء الخير';
-  static const String calendarExportComingSoon = 'تصدير التقويم قادم قريبًا';
+  static const String calendarExportFailed = 'تعذّر تصدير التقويم';
+  static const String calendarNothingToExport =
+      'لا توجد مواعيد بتاريخ محدّد لتصديرها';
+
+  static String calendarExported(int skipped) => skipped == 0
+      ? 'تم تصدير التقويم'
+      : 'تم تصدير التقويم، وتم تخطّي ${_itemNoun(skipped)} بدون تاريخ';
   static const String aiNeedsHelp =
       'يحتاج الذكاء الاصطناعي إلى مساعدتك في هذا العنصر.';
   static const String itemsNeedingReview = 'عناصر بحاجة إلى مراجعة';

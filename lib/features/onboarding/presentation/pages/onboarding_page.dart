@@ -30,7 +30,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
   // "next" button for explicit accept/skip actions.
   static const _pages = <_OnboardingSlide>[
     _OnboardingSlide(
-      icon: Icons.school_outlined,
+      imagePath: 'assets/icons/uni-icon.png',
       title: OnboardingStrings.welcomeTitle,
       body: OnboardingStrings.welcomeBody,
     ),
@@ -167,7 +167,10 @@ class _SlideView extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(slide.icon, size: 96.sp, color: context.colors.primary),
+        if (slide.imagePath != null)
+          Image.asset(slide.imagePath!, width: 120.sp, height: 120.sp)
+        else
+          Icon(slide.icon, size: 96.sp, color: context.colors.primary),
         SizedBox(height: 40.h),
         Text(
           slide.title,
@@ -245,12 +248,19 @@ class _Dots extends StatelessWidget {
 
 class _OnboardingSlide {
   const _OnboardingSlide({
-    required this.icon,
+    this.icon,
+    this.imagePath,
     required this.title,
     required this.body,
-  });
+  }) : assert(icon != null || imagePath != null,
+            'A slide needs either an icon or an imagePath');
 
-  final IconData icon;
+  /// Material icon for the slide. Ignored when [imagePath] is set.
+  final IconData? icon;
+
+  /// Asset path for an image-based slide (e.g. the app logo). Takes
+  /// precedence over [icon] when provided.
+  final String? imagePath;
   final String title;
   final String body;
 }

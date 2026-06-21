@@ -22,7 +22,13 @@ class LoginPage extends StatefulWidget {
   /// Drives the `onboarding_auth_*` analytics and the "continue as guest" CTA.
   final bool fromOnboarding;
 
-  const LoginPage({super.key, this.fromOnboarding = false});
+  /// When true, sign-in success pops `true` and "continue as guest" pops
+  /// `false`, instead of navigating to home. Used by callers that pushed
+  /// this page and are awaiting a bool result (e.g. a feature-gate retry).
+  /// Defaults to false so existing entry points are unaffected.
+  final bool popResultOnSuccess;
+
+  const LoginPage({super.key, this.fromOnboarding = false, this.popResultOnSuccess = false});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -78,7 +84,11 @@ class _LoginPageState extends State<LoginPage> {
     if (widget.fromOnboarding) {
       _analytics.logEvent(AnalyticsEvents.onboardingAuthSkip);
     }
-    context.go(AppRoutes.home);
+    if (widget.popResultOnSuccess) {
+      context.pop(false);
+    } else {
+      context.go(AppRoutes.home);
+    }
   }
 
   @override
@@ -93,7 +103,11 @@ class _LoginPageState extends State<LoginPage> {
         // navigate explicitly once the user is authenticated.
         listener: (context, state) {
           if (state is AuthAuthenticated) {
-            context.go(AppRoutes.home);
+            if (widget.popResultOnSuccess) {
+              context.pop(true);
+            } else {
+              context.go(AppRoutes.home);
+            }
           }
         },
         builder: (context, state) {
@@ -114,8 +128,9 @@ class _LoginPageState extends State<LoginPage> {
                   SizedBox(height: 8.h),
                   Text(
                     AuthStrings.tagline,
-                    style: context.textTheme.bodyMedium
-                        ?.copyWith(color: context.colors.outline),
+                    style: context.textTheme.bodyMedium?.copyWith(
+                      color: context.colors.outline,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                   const Spacer(),
@@ -138,8 +153,9 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(height: 16.h),
                     Text(
                       _error!,
-                      style: context.textTheme.bodyMedium
-                          ?.copyWith(color: context.colors.error),
+                      style: context.textTheme.bodyMedium?.copyWith(
+                        color: context.colors.error,
+                      ),
                       textAlign: TextAlign.center,
                     ),
                   ],
@@ -164,10 +180,9 @@ class _LoginPageState extends State<LoginPage> {
 class _AppIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final initial =
-        AppConfig.instance.appName.trim().isNotEmpty
-            ? AppConfig.instance.appName.trim().characters.first
-            : '?';
+    final initial = AppConfig.instance.appName.trim().isNotEmpty
+        ? AppConfig.instance.appName.trim().characters.first
+        : '?';
 
     return Container(
       width: 96.r,

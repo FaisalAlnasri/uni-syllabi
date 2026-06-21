@@ -3,12 +3,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/entities/course.dart';
 import '../../domain/entities/deliverable.dart';
 import '../../domain/repositories/course_repository.dart';
+import '../../domain/services/calendar_export_service.dart';
 import 'course_state.dart';
 
 class CourseCubit extends Cubit<CourseState> {
   final CourseRepository _repository;
+  final CalendarExportService _calendarExport;
 
-  CourseCubit(this._repository) : super(const CourseState());
+  CourseCubit(this._repository, this._calendarExport)
+      : super(const CourseState());
 
   // ── Getters (mirror the old CourseProvider API) ───────────────────────────
 
@@ -182,8 +185,14 @@ class CourseCubit extends Cubit<CourseState> {
     // TODO: navigate to syllabus upload flow.
   }
 
-  void exportToCalendar() {
-    // TODO: implement calendar export logic.
+  /// Exports every course's dated deliverables to a single `.ics` file and
+  /// opens the share sheet. Returns the number of deliverables skipped because
+  /// they had no date, or `null` when there is nothing dated to export.
+  Future<int?> exportToCalendar() async {
+    final hasDated =
+        state.courses.any((c) => c.deliverables.any((d) => d.date != null));
+    if (!hasDated) return null;
+    return _calendarExport.exportCourses(courses);
   }
 
   // ── Seed data ─────────────────────────────────────────────────────────────
