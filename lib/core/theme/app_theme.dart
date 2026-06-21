@@ -200,6 +200,13 @@ abstract final class AppTheme {
         focusedErrorBorder: fieldBorder(scheme.error, 1.6),
       ),
 
+      // ── Text selection — brand-tinted caret & handles ────────
+      textSelectionTheme: TextSelectionThemeData(
+        cursorColor: scheme.primary,
+        selectionColor: scheme.primary.withValues(alpha: 0.24),
+        selectionHandleColor: scheme.primary,
+      ),
+
       // ── Chips ───────────────────────────────────────────────
       chipTheme: ChipThemeData(
         backgroundColor: scheme.surfaceContainerHigh,

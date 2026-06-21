@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/id_generator.dart';
+import '../../../../core/widgets/app_text_field.dart';
 import '../../domain/entities/course.dart';
 import '../../domain/entities/deliverable.dart';
 import '../courses_strings.dart';
@@ -187,27 +188,13 @@ class _CourseFormSheetState extends State<_CourseFormSheet> {
               // Title
               _FieldLabel(CoursesStrings.courseTitleField),
               SizedBox(height: 6.h),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
-                decoration: BoxDecoration(
-                  color: c.surfaceAlt,
-                  borderRadius: BorderRadius.circular(12.r),
-                  border: Border.all(color: c.border),
-                ),
-                child: TextField(
-                  controller: _titleController,
-                  style: TextStyle(fontSize: 14.sp, color: c.textPrimary),
-                  decoration: InputDecoration(
-                    isDense: true,
-                    contentPadding: EdgeInsets.zero,
-                    border: InputBorder.none,
-                    hintText: CoursesStrings.courseTitleHint,
-                    hintStyle: TextStyle(color: c.textMuted),
-                  ),
-                  onChanged: (_) {
-                    if (_error != null) setState(() => _error = null);
-                  },
-                ),
+              AppTextField(
+                controller: _titleController,
+                hintText: CoursesStrings.courseTitleHint,
+                textInputAction: TextInputAction.done,
+                onChanged: (_) {
+                  if (_error != null) setState(() => _error = null);
+                },
               ),
               SizedBox(height: 16.h),
 

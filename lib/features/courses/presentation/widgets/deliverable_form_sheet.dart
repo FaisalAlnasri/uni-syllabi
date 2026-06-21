@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/id_generator.dart';
+import '../../../../core/widgets/app_text_field.dart';
 import '../../domain/entities/course.dart';
 import '../../domain/entities/deliverable.dart';
 import '../courses_strings.dart';
@@ -218,21 +219,13 @@ class _DeliverableFormSheetState extends State<_DeliverableFormSheet> {
               // Title
               _FieldLabel(CoursesStrings.title),
               SizedBox(height: 6.h),
-              _FieldBox(
-                child: TextField(
-                  controller: _titleController,
-                  style: TextStyle(fontSize: 14.sp, color: c.textPrimary),
-                  decoration: InputDecoration(
-                    isDense: true,
-                    contentPadding: EdgeInsets.zero,
-                    border: InputBorder.none,
-                    hintText: CoursesStrings.deliverableTitleHint,
-                    hintStyle: TextStyle(color: c.textMuted),
-                  ),
-                  onChanged: (_) {
-                    if (_error != null) setState(() => _error = null);
-                  },
-                ),
+              AppTextField(
+                controller: _titleController,
+                hintText: CoursesStrings.deliverableTitleHint,
+                textInputAction: TextInputAction.done,
+                onChanged: (_) {
+                  if (_error != null) setState(() => _error = null);
+                },
               ),
               SizedBox(height: 14.h),
 
@@ -280,20 +273,10 @@ class _DeliverableFormSheetState extends State<_DeliverableFormSheet> {
                       children: [
                         _FieldLabel(CoursesStrings.weightPercentLabel),
                         SizedBox(height: 6.h),
-                        _FieldBox(
-                          child: TextField(
-                            controller: _weightController,
-                            keyboardType: TextInputType.number,
-                            style: TextStyle(
-                                fontSize: 14.sp, color: c.textPrimary),
-                            decoration: InputDecoration(
-                              isDense: true,
-                              contentPadding: EdgeInsets.zero,
-                              border: InputBorder.none,
-                              hintText: '—',
-                              hintStyle: TextStyle(color: c.textMuted),
-                            ),
-                          ),
+                        AppTextField(
+                          controller: _weightController,
+                          hintText: '—',
+                          numeric: true,
                         ),
                       ],
                     ),
