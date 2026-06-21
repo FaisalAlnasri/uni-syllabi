@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
@@ -6,6 +7,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../domain/entities/course.dart';
 import '../../domain/entities/deliverable.dart';
 import '../courses_strings.dart';
+import '../cubit/course_cubit.dart';
 import 'course_glyph.dart';
 import 'deliverable_detail_sheet.dart';
 import 'type_glyph.dart';
@@ -305,16 +307,98 @@ class _TimelineItem extends StatelessWidget {
               ),
             ),
             Expanded(
-              child: _DeliverableCard(
-                deliverable: deliverable,
-                course: course,
-                color: color,
-                bucket: bucket,
+              child: Dismissible(
+                key: ValueKey('deliverable-${course.id}-${deliverable.id}'),
+                direction: DismissDirection.endToStart,
+                background: _SwipeDeleteBackground(color: c),
+                confirmDismiss: (_) => _confirmDeleteDeliverable(
+                  context,
+                  deliverable: deliverable,
+                  course: course,
+                ),
+                child: _DeliverableCard(
+                  deliverable: deliverable,
+                  course: course,
+                  color: color,
+                  bucket: bucket,
+                ),
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+/// Prompts the user before removing a deliverable via swipe. Performs the
+/// delete and surfaces a confirmation snackbar when accepted; returns whether
+/// the dismiss should proceed.
+Future<bool> _confirmDeleteDeliverable(
+  BuildContext context, {
+  required Deliverable deliverable,
+  required Course course,
+}) async {
+  final c = context.c;
+  final cubit = context.read<CourseCubit>();
+  final messenger = ScaffoldMessenger.of(context);
+  final confirmed = await showDialog<bool>(
+    context: context,
+    builder: (ctx) => AlertDialog(
+      backgroundColor: c.surface,
+      title: Text(
+        CoursesStrings.removeDeliverableTitle,
+        style: TextStyle(color: c.textPrimary),
+      ),
+      content: Text(
+        CoursesStrings.removeDeliverableBody(deliverable.title),
+        style: TextStyle(color: c.textSecondary),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(ctx).pop(false),
+          child: Text(
+            CoursesStrings.cancel,
+            style: TextStyle(color: c.textSecondary),
+          ),
+        ),
+        TextButton(
+          onPressed: () => Navigator.of(ctx).pop(true),
+          child: Text(
+            CoursesStrings.remove,
+            style: TextStyle(
+              color: Theme.of(ctx).colorScheme.error,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+  if (confirmed != true) return false;
+  await cubit.deleteDeliverable(course.id, deliverable.id);
+  messenger.showSnackBar(
+    const SnackBar(content: Text(CoursesStrings.deliverableDeleted)),
+  );
+  return true;
+}
+
+/// The red "delete" affordance revealed as a deliverable card is swiped away.
+class _SwipeDeleteBackground extends StatelessWidget {
+  final AppColors color;
+  const _SwipeDeleteBackground({required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    final error = Theme.of(context).colorScheme.error;
+    return Container(
+      padding: EdgeInsetsDirectional.only(end: 20.w),
+      alignment: AlignmentDirectional.centerEnd,
+      decoration: BoxDecoration(
+        color: error.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(12.r),
+      ),
+      child: Icon(Icons.delete_outline_rounded, size: 22.sp, color: error),
     );
   }
 }
